@@ -1,0 +1,23 @@
+{
+  "name": "heroku-nodejs",
+  "version": "0.0.0",
+  "description": "This example app is so cool.",
+  "main": "web.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git repository: https://github.com/fredollinger/node-example.git"
+  },
+  "keywords": [
+    "none"
+  ],
+  "author": "fredollinger",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "express": "~4.4.4",
+    "logfmt": "~1.1.2",
+    "body-parser" : "1.4.3"
+  }
+}
