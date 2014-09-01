@@ -1,5 +1,8 @@
-task :default => :refresh
+APP="web.js"
 
+task :default => :start
+
+namespace :heroku do
 desc "Push changes to git"
 task :push do
     sh "git push heroku master"
@@ -24,4 +27,10 @@ end
 
 desc "Combo to update everything and view the page"
 task :refresh => [:commit, :push, :restart, :open] do
+end
+end # namespace heroku
+
+desc "Start server locally"
+task :start do
+    sh "nodejs #{APP}"
 end
