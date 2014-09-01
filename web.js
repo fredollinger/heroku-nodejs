@@ -6,14 +6,31 @@ mongoose.connect('mongodb://localhost/db');
 var userSchema = new mongoose.Schema({
     name: { type: String },
     address: { type: String },
-    price: { type: Number, min: 0 }
+    price: { type: Number, min: 0 },
+    date: { type: Number, min: 0 },
+    request: { type: String } // "buy" or "sell"
 }); // END userSchema
 
 app.use(express.static(__dirname + '/public'));
 
-app.get('/*', function(req, res) {
-    console.log(req.query.numba);
-    res.send(req.query.color);
-});
+app.get('/buy*', function(req, res) {
+    console.log("buy");
+    res.send(req.query.numba);
+
+    var Customer = mongoose.model('Buyers', userSchema);
+
+    var Buyer = new Customer ({
+        name: 'John Doe', 
+        address: '1313 Crooken Lane',
+        price: 5.00,
+	date: "Tue, 26 Aug 2014 19:34:17 -0700",
+        request: "buy"
+    });  // END Buyer
+}); // app.get()
+
+app.get('/sell*', function(req, res) {
+    console.log("sell");
+    res.send(req.query.numba);
+}); // app.get('/sell*')
 
 app.listen(process.env.PORT || 3000);
