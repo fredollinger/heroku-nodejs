@@ -13,8 +13,14 @@ var userSchema = new mongoose.Schema({
 
 app.use(express.static(__dirname + '/public'));
 
+function logRequest(type) {
+    console.log(type);
+    return;
+}
+
 app.get('/buy*', function(req, res) {
-    console.log("buy");
+    logRequest("buy");
+    //console.log("buy");
     res.send(req.query.numba);
 
     var Customer = mongoose.model('Buyers', userSchema);
@@ -29,7 +35,8 @@ app.get('/buy*', function(req, res) {
 }); // app.get()
 
 app.get('/sell*', function(req, res) {
-    console.log("sell");
+    logRequest("sell");
+    //console.log("sell");
     res.send(req.query.numba);
 }); // app.get('/sell*')
 
