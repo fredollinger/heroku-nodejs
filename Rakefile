@@ -34,3 +34,17 @@ desc "Start server locally"
 task :start do
     sh "nodejs #{APP}"
 end
+
+desc "Stop server"
+task :stop do
+    sh "killall -9 nodejs"
+end
+
+desc "Start server locally"
+task :restart => [:stop, :start] do
+end
+
+desc "View the webpage in a browser"
+task :open => :start do
+	sh "firefox localhost:3000"
+end

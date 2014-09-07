@@ -13,31 +13,44 @@ var userSchema = new mongoose.Schema({
 
 app.use(express.static(__dirname + '/public'));
 
-function logRequest(type) {
-    console.log(type);
-    return;
-}
-
-app.get('/buy*', function(req, res) {
-    logRequest("buy");
-    //console.log("buy");
-    res.send(req.query.numba);
-
-    var Customer = mongoose.model('Buyers', userSchema);
-
-    var Buyer = new Customer ({
+function logRequest(req) {
+    var m = mongoose.model('Buyers', userSchema);
+    var Customer = new m ({
         name: 'John Doe', 
         address: '1313 Crooken Lane',
         price: 5.00,
-	date: "Tue, 26 Aug 2014 19:34:17 -0700",
-        request: "buy"
+	date: 1000,
+        request: "sell"
     });  // END Buyer
+
+    Customer.save(function(err) {
+	    console.log("saving");
+	    if (!err) {
+	        console.log('todoItem saved.');
+	    }
+	    else
+                console.log(err);
+    }); // END SAVE
+
+    m.findOne({ 'name': 'John Doe' }, 'name', function (err, result){
+        if (err) return handleError(err);
+        console.log('Person: [%s] ', result.name) // Space Ghost is a talk show host.
+    })
+} // END logRequest()
+
+app.get('/buy*', function(req, res) {
+    req["transaction"] = "buy";
+    logRequest(req);
+    console.log("buy");
+    // res.send(req.query.numba);
 }); // app.get()
 
 app.get('/sell*', function(req, res) {
-    logRequest("sell");
-    //console.log("sell");
-    res.send(req.query.numba);
+    req["transaction"] = "sell";
+    logRequest(req);
+    console.log("sell");
+
+    // res.send(req.query.numba);
 }); // app.get('/sell*')
 
 app.listen(process.env.PORT || 3000);
