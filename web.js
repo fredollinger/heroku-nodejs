@@ -4,8 +4,8 @@ var mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/db');
 var userSchema = new mongoose.Schema({
-    name: { type: String },
     address: { type: String },
+    number: { type: String },
     price: { type: Number, min: 0 },
     date: { type: Number, min: 0 },
     request: { type: String } // "buy" or "sell"
@@ -13,11 +13,18 @@ var userSchema = new mongoose.Schema({
 
 app.use(express.static(__dirname + '/public'));
 
+function findMatch(req) {
+    m.findOne({ 'location': 'Brazil' }, 'number', function (err, result){
+        if (err) return handleError(err);
+        console.log('Person: [%s] ', result.number) // Space Ghost is a talk show host.
+    });
+} // END findMatch
+
 function logRequest(req) {
     var m = mongoose.model('Buyers', userSchema);
     var Customer = new m ({
-        name: 'John Doe', 
-        address: '1313 Crooken Lane',
+        address: req.query.address,
+        number: req.query.number,
         price: 5.00,
 	date: 1000,
         request: "sell"
@@ -32,23 +39,20 @@ function logRequest(req) {
                 console.log(err);
     }); // END SAVE
 
-    m.findOne({ 'name': 'John Doe' }, 'name', function (err, result){
-        if (err) return handleError(err);
-        console.log('Person: [%s] ', result.name) // Space Ghost is a talk show host.
-    })
 } // END logRequest()
 
 app.get('/buy*', function(req, res) {
     req["transaction"] = "buy";
     logRequest(req);
     console.log("buy");
-    // res.send(req.query.numba);
+    res.send(req.query.numba);
 }); // app.get()
 
 app.get('/sell*', function(req, res) {
     req["transaction"] = "sell";
     logRequest(req);
     console.log("sell");
+    res.send(req.query.numba);
 
     // res.send(req.query.numba);
 }); // app.get('/sell*')

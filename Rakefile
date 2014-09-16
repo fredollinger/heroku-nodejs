@@ -45,6 +45,6 @@ task :restart => [:stop, :start] do
 end
 
 desc "View the webpage in a browser"
-task :open => :start do
+task :open do
 	sh "firefox localhost:3000"
 end
