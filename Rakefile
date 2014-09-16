@@ -1,4 +1,4 @@
-APP="web.js"
+APP="index.js"
 
 task :default => :start
 
