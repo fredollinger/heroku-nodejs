@@ -2,6 +2,13 @@ APP="index.js"
 
 task :default => :start
 
+namespace :test do
+desc "test validator code"
+task :validate do
+    sh "test/validate.js"
+end
+end # namespace :test
+
 namespace :heroku do
 desc "Push changes to git"
 task :push do

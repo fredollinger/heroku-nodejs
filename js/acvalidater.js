@@ -1,4 +1,4 @@
-function Apple(type) {
-    this.type = type;
-    this.color = "red";
+function ACValidator() {
+    // this.type = type;
+    // this.color = "red";
 }
