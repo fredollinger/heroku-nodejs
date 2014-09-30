@@ -1,5 +1,10 @@
 #!/usr/bin/rhino
 
+load("test/common.js");
 load("js/acvalidater.js");
 
-var validator = ACValidator();
+vali = new ACValidator();
+number="619-867-5309"
+//console.log(getMethods(vali));
+vali.validatePhoneNumber(number);
+//vali.bob();
