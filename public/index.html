@@ -3,15 +3,22 @@
     <head>
         <meta charset="utf-8">
 	<link rel="stylesheet" href="themes/simplecozy.css" type="text/css" media="screen" />
+	<script type="text/javascript"
+        src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
         <title>AutoCrest</title>
     </head>
     <body>
+        <div>
+        <h1>Hello {{ sometext }}</h1>
+        </div>
+
     	<div>
         <h1>AutoCrest</h1>
 	<h1>Tue, 26 Aug 2014 19:34:17 -0700</h1>
     	</div>
     	<div><form action="test">
 		<input name="address" placeholder="Enter location/address">
+		<input name="plate_number" placeholder="Enter license plate number">
 		<input name="number" placeholder="Enter phone number">
 		<input name="price" placeholder="Enter price">
 		<input type="submit" formaction="sell" value="Have Spot to Sell" >

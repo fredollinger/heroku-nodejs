@@ -6,6 +6,7 @@ var now = require('mout/time/now');
 mongoose.connect('mongodb://localhost/db');
 var userSchema = new mongoose.Schema({
     address: { type: String },
+    plate_number: { type: String },
     number: { type: String },
     price: { type: Number, min: 0 },
     date: { type: Number, min: 0 },
@@ -27,6 +28,7 @@ function logRequest(req) {
     var m = mongoose.model('Buyers', userSchema);
     var Customer = new m ({
         address: req.query.address,
+        plate_number: req.query.plate_number,
         number: req.query.number,
         price: req.query.price,
 	date: now(),
