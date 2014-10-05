@@ -15,16 +15,18 @@ var userSchema = new mongoose.Schema({
 
 app.use(express.static(__dirname + '/public'));
 
-function findMatch(req) {
+function findMatch(req, request) {
     var m = mongoose.model('Customers', userSchema);
-    m.findOne({ 'location': 'Brazil' }, 'number', function (err, result){
+    m.findOne({ 'request': request }, 'number', function (err, result){
         if (err) return handleError(err);
-        console.log('Person: [%s] ', result.number) // Space Ghost is a talk show host.
+	//if ( null == object ) return res
+        //console.log('Object type: [%s] ', Object.prototype.toString.call(result));
+        //console.log('Person: [%s] ', result.number) // Space Ghost is a talk show host.
 	return result;
     });
 } // END findMatch
 
-function logRequest(req) {
+function logRequest(req, request) {
     var m = mongoose.model('Buyers', userSchema);
     var Customer = new m ({
         address: req.query.address,
@@ -32,7 +34,7 @@ function logRequest(req) {
         number: req.query.number,
         price: req.query.price,
 	date: now(),
-        request: "sell"
+        request: request
     });  // END Buyer
 
     Customer.save(function(err) {
@@ -48,16 +50,23 @@ function logRequest(req) {
 
 app.get('/buy*', function(req, res) {
     req["transaction"] = "buy";
-    logRequest(req);
+    logRequest(req, "buy");
     console.log("buy");
-    res.sendfile("public/success.html");
+    match=findMatch(req, "sell");
+    if ( null != match ){
+    	res.sendfile("public/success.html");
+    }
+    else{
+    	res.sendfile("public/fail.html");
+    }
 }); // app.get()
 
 app.get('/sell*', function(req, res) {
     req["transaction"] = "sell";
-    logRequest(req);
+    logRequest(req, "sell");
     console.log("sell");
     res.send(req.query.numba);
+    match=findMatch(req, "buy");
 }); // app.get('/sell*')
 
 app.listen(process.env.PORT || 3000);
