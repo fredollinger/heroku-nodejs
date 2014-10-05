@@ -5,11 +5,12 @@
 	<link rel="stylesheet" href="themes/simplecozy.css" type="text/css" media="screen" />
 	<script type="text/javascript"
         src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+	<script src="core.js"></script>
         <title>AutoCrest</title>
     </head>
     <body>
-        <div>
-        <h1>Hello {{ sometext }}</h1>
+	<div ng-controller="HelloController" >
+        <h1>Hello {{helloTo.title}}</h1>
         </div>
 
     	<div>
@@ -19,7 +20,7 @@
     	<div><form action="test">
 		<input name="address" placeholder="Enter location/address">
 		<input name="plate_number" placeholder="Enter license plate number">
-		<input name="number" placeholder="Enter phone number">
+		<input name="phone_number" placeholder="Enter phone number">
 		<input name="price" placeholder="Enter price">
 		<input type="submit" formaction="sell" value="Have Spot to Sell" >
 		<input type="submit" formaction="buy" value="Want Parking Spot" >

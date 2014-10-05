@@ -7,6 +7,10 @@ desc "test validator code"
 task :validate do
     sh "test/validate.js"
 end
+desc "test database schema"
+task :schema do
+    sh "test/schema.js"
+end
 end # namespace :test
 
 namespace :heroku do
