@@ -3,6 +3,11 @@ APP="index.js"
 task :default => :start
 
 namespace :test do
+desc "Test viper the database connector"
+task :db do
+    sh "nodejs test/dbtest.js"
+end
+
 desc "test validator code"
 task :validate do
     sh "test/validate.js"
@@ -59,3 +64,4 @@ desc "View the webpage in a browser"
 task :open do
 	sh "firefox localhost:3000"
 end
+
