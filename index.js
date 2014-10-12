@@ -6,8 +6,12 @@ var now = require('mout/time/now');
 var ACValidater = require('./js/acvalidater.js');
 var validate = new ACValidater();
 
-mongoose.connect('mongodb://localhost/db');
+var ACViper = require('./js/acviper.js');
+var viper = new ACViper();
 
+//mongoose.connect('mongodb://localhost/db');
+
+/*
 var userSchema = new mongoose.Schema({
     address: { type: String },
     plate_number: { type: String },
@@ -16,9 +20,11 @@ var userSchema = new mongoose.Schema({
     date: { type: Number, min: 0 },
     request: { type: String } // "buy" or "sell"
 }); // END userSchema
+*/
 
 app.use(express.static(__dirname + '/public'));
 
+/*
 function findMatch(req, request) {
     var m = mongoose.model('Customers', userSchema);
     console.log('search for: [%s] ', request);
@@ -30,6 +36,7 @@ function findMatch(req, request) {
 	return result;
     });
 } // END findMatch
+
 
 function logRequest(req) {
     var m = mongoose.model('Buyers', userSchema);
@@ -52,12 +59,14 @@ function logRequest(req) {
     }); // END SAVE
 
 } // END logRequest()
+*/
 
 app.get('/buy*', function(req, res) {
     req["transaction"] = "buy";
     console.log("trans: [%s]", req.transaction);
-    logRequest(req);
+    viper.logRequest(req);
     console.log("buy");
+    /*
     match=findMatch(req, "sell");
     if ( null != match ){
     	res.sendfile("public/success.html");
@@ -65,6 +74,7 @@ app.get('/buy*', function(req, res) {
     else{
     	res.sendfile("public/fail.html");
     }
+    */
 }); // app.get()
 
 app.get('/sell*', function(req, res) {
@@ -76,7 +86,8 @@ app.get('/sell*', function(req, res) {
     else{
     	console.log("phone fail");
     }
-    logRequest(req);
+    viper.logRequest(req);
+    /*
     match=findMatch(req, "buy");
     if ( null != match ){
     	res.sendfile("public/success.html");
@@ -84,6 +95,7 @@ app.get('/sell*', function(req, res) {
     else{
     	res.sendfile("public/fail.html");
     }
+    */
 }); // app.get('/sell*')
 
 app.listen(process.env.PORT || 3000);
