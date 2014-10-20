@@ -16,7 +16,7 @@ app.get('/buy*', function(req, res) {
     console.log("trans: [%s]", req.transaction);
     viper.logRequest(req);
     console.log("buy");
-    match=viper.findMatch(req, "sell");
+    match=viper.findMatch(req, "sell", buyerSearchCB);
     if ( null != match ){
     	res.sendfile("public/success.html");
     }
@@ -35,13 +35,28 @@ app.get('/sell*', function(req, res) {
     	console.log("phone fail");
     }
     viper.logRequest(req);
-    match=viper.findMatch(req, "buy");
-    if ( null != match ){
-    	res.sendfile("public/success.html");
+    match=viper.findMatch(req, "buy", sellerSearchCB);
+
+}); // app.get('/sell*')
+
+/* Searcher is seller 
+ * which means they searched for a "buy" match. */
+function sellerSearchCB(err, result){
+    if ( null != result ){
+    	app.sendfile("public/success.html");
     }
     else{
-    	res.sendfile("public/fail.html");
+    	app.sendfile("public/fail.html");
     }
-}); // app.get('/sell*')
+}
+
+function buyerSearchCB(err, result){
+res    if ( null != result ){
+    	app.sendfile("public/success.html");
+    }
+    else{
+    	app.sendfile("public/fail.html");
+    }
+}
 
 app.listen(process.env.PORT || 3000);

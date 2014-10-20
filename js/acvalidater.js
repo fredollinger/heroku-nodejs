@@ -11,5 +11,6 @@ function ACValidator() {
         var digits = p.replace(/\D/g, "");
         return (digits.match(phoneRe) !== null);
     }
+    this.isNumber = function (n){ return /^-?[\d.]+(?:e-?\d+)?$/.test(n); } 
 } // END ACValidator
 module.exports = ACValidator;

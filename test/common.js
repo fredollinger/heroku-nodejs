@@ -1,3 +1,6 @@
+var module = {
+};
+
 function getMethods(obj) {
 }
 var console = {
