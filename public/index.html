@@ -8,7 +8,7 @@
 	<script src="core.js"></script>
         <title>AutoCrest</title>
     </head>
-    <body>
+    <body ng-app="autocrest">
 	<div ng-controller="HelloController" >
         <h1>Hello {{helloTo.title}}</h1>
         </div>
@@ -18,9 +18,15 @@
 	<h1>Tue, 26 Aug 2014 19:34:17 -0700</h1>
     	</div>
     	<div><form action="test">
+		<div ng-controller="addressError"></div>
 		<input name="address" placeholder="Enter location/address">
+		<div ng-controller="plateNumberError"></div>
 		<input name="plate_number" placeholder="Enter license plate number">
+		<div ng-controller="phoneError">
+			<font color="red">*</font>
 		<input name="phone_number" placeholder="Enter phone number">
+		</div>
+		<div ng-controller="plateNumberError"></div>
 		<input name="price" placeholder="Enter price">
 		<input type="submit" formaction="sell" value="Have Spot to Sell" >
 		<input type="submit" formaction="buy" value="Want Parking Spot" >
@@ -33,5 +39,13 @@
 	Advertise or buy parking. Choose one. All transactions are to be negotiated between the parker and parkee. AutoCrest is not responsible for guarantee of parking spots, payment, or liability resulting from this sites use.
         </p>
     	</div>
-    </body>
-</html>
+
+<script>
+
+    angular.module("autocrest", [])
+    .controller("HelloController", function($scope) {
+    $scope.helloTo = {};
+    $scope.helloTo.title = "World, AutoCrest";
+    });
+
+</script></body></html>

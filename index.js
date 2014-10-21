@@ -51,7 +51,7 @@ function sellerSearchCB(err, result){
 }
 
 function buyerSearchCB(err, result){
-res    if ( null != result ){
+    if ( null != result ){
     	app.sendfile("public/success.html");
     }
     else{
