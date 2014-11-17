@@ -16,8 +16,9 @@
   "author": "fredollinger",
   "license": "BSD-2-Clause",
   "dependencies": {
+    "body-parser": "1.4.3",
     "express": "~4.4.4",
     "logfmt": "~1.1.2",
-    "body-parser" : "1.4.3"
+    "socket.io": "^1.2.0"
   }
 }

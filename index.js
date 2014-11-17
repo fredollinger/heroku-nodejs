@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
-//var mongoose = require('mongoose');
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 var now = require('mout/time/now');
 
 var ACValidater = require('./js/acvalidater.js');
@@ -10,6 +11,13 @@ var ACViper = require('./js/acviper.js');
 var viper = new ACViper();
 
 app.use(express.static(__dirname + '/public'));
+
+io.on('connection', function (socket) {
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+    console.log(data);
+    });
+});
 
 app.get('/buy*', function(req, res) {
     req["transaction"] = "buy";
@@ -59,4 +67,5 @@ function buyerSearchCB(err, result){
     }
 }
 
-app.listen(process.env.PORT || 3000);
+// app.listen(process.env.PORT || 3000);
+server.listen(process.env.PORT || 3000);
