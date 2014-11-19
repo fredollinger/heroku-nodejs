@@ -13,10 +13,18 @@ var viper = new ACViper();
 app.use(express.static(__dirname + '/public'));
 
 io.on('connection', function (socket) {
-    socket.emit('news', { hello: 'world' });
+    console.log("Connection!!");
+    console.log(socket.type);
+    //socket.emit('news', { hello: 'world' });
     socket.on('my other event', function (data) {
-    console.log(data);
+        console.log(data);
+        return;
     });
+
+    socket.on('failed', function (data) {
+        console.log("failed");
+    });
+    // socket.emit('news', { hello: 'world' });
 });
 
 app.get('/buy*', function(req, res) {
@@ -45,6 +53,8 @@ app.get('/sell*', function(req, res) {
     viper.logRequest(req);
     match=viper.findMatch(req, "buy", sellerSearchCB);
 
+    res.redirect('/?status=validating');
+
 }); // app.get('/sell*')
 
 /* Searcher is seller 
@@ -54,7 +64,11 @@ function sellerSearchCB(err, result){
     	app.sendfile("public/success.html");
     }
     else{
-    	app.sendfile("public/fail.html");
+    	//app.send("public/fail.html");
+        
+        io.sockets.emit('failed', { error: 'failed to validate' });
+        console.log("emitting Fail");
+        return;
     }
 }
 
@@ -67,5 +81,4 @@ function buyerSearchCB(err, result){
     }
 }
 
-// app.listen(process.env.PORT || 3000);
 server.listen(process.env.PORT || 3000);

@@ -53,12 +53,22 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io.connect('http://localhost');
-    socket.on('news', function (data) {
-		        console.log(data);
-			    socket.emit('my other event', { my: 'data' });
-			      });
+
+  socket.on('news', function (data) {
+      console.log(data);
+      alert("news");
+	  // socket.emit('my other event', { my: 'data' });
+      window.stop();
+  });
+
+  socket.on('failed', function (data) {
+      //io.sockets.emit('failed', { error: 'failed to validate' });
+      console.log("failed");
+      alert("failed");
+      window.stop();
+  });
+
 </script>
 
 </body></html>
-
 
