@@ -14,12 +14,19 @@ app.use(express.static(__dirname + '/public'));
 
 io.on('connection', function (socket) {
     console.log("Connection!!");
-    console.log(socket.type);
+    console.log(socket.methods);
     //socket.emit('news', { hello: 'world' });
     socket.on('my other event', function (data) {
         console.log(data);
         return;
     });
+
+    socket.on('sell', function (data) {
+        console.log("sell");
+        io.sockets.emit('failed', { error: 'failed to validate' });
+        return;
+    });
+
 
     socket.on('failed', function (data) {
         console.log("failed");

@@ -6,6 +6,9 @@
 	<script type="text/javascript"
         src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
 	<script src="core.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
+
         <title>AutoCrest</title>
     </head>
     <body ng-app="autocrest">
@@ -20,14 +23,18 @@
     	</div>
 
 	<div>
+        <!--
     	<form action="test">
+        -->
+
+    	<form>
 		<input name="address" placeholder="Enter location/address">
 		<input name="plate_number" placeholder="Enter license plate number">
 		<div ng-controller="PhoneController" ><font color="red">{{error}}</font></div>
 		<input name="phone_number" placeholder="Enter phone number">
 		<input name="price" placeholder="Enter price">
-		<input type="submit" formaction="sell" value="Have Spot to Sell" >
 		<input type="submit" formaction="buy" value="Want Parking Spot" >
+        <button onclick="sell(this.form)">Sell Parking Spot</button>
         </form></div>
         <p>
 	Looking for parking close to where you are? This spot is for you.
@@ -53,6 +60,13 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io.connect('http://localhost');
+
+  function sell(data){ 
+      socket.emit('sell', { error: 'failed to validate' });
+	  socket.emit('my other event', { my: 'data' });
+      console.log("sell");
+      //alert("stub");
+  }
 
   socket.on('news', function (data) {
       console.log(data);
