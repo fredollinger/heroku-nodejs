@@ -12,33 +12,48 @@ var viper = new ACViper();
 
 app.use(express.static(__dirname + '/public'));
 
+function getMethods(obj) {
+    var result = [];
+    for (var id in obj) {
+        try {
+            if (typeof(obj[id]) == "function") {
+                result.push(id + ": " + obj[id].toString());
+            }
+        }
+        catch (err) {
+            result.push(id + ": inaccessible");
+        }
+    }
+    return result;
+}
+
 io.on('connection', function (socket) {
     console.log("Connection!!");
-    console.log(socket.methods);
+    //console.log(socket.methods);
     //socket.emit('news', { hello: 'world' });
     socket.on('my other event', function (data) {
-        console.log(data);
+        //console.log(data);
         return;
     });
 
     socket.on('sell', function (data) {
-        console.log("sell");
-        io.sockets.emit('failed', { error: 'failed to validate' });
+        //console.log(data.user.address);
+        //io.sockets.emit('failed', { error: 'failed to validate' });
         return;
     });
 
 
     socket.on('failed', function (data) {
-        console.log("failed");
+        //console.log("failed");
     });
     // socket.emit('news', { hello: 'world' });
 });
 
 app.get('/buy*', function(req, res) {
     req["transaction"] = "buy";
-    console.log("trans: [%s]", req.transaction);
+    //console.log("trans: [%s]", req.transaction);
     viper.logRequest(req);
-    console.log("buy");
+    //console.log("buy");
     match=viper.findMatch(req, "sell", buyerSearchCB);
     if ( null != match ){
     	res.sendfile("public/success.html");
@@ -50,12 +65,12 @@ app.get('/buy*', function(req, res) {
 
 app.get('/sell*', function(req, res) {
     req["transaction"] = "sell";
-    console.log("trans: [%s]", req.transaction);
+    //console.log("trans: [%s]", req.transaction);
     if (validate.phoneNumber(req.query.phone_number)){
-    	console.log("phone success");
+    	//console.log("phone success");
     }
     else{
-    	console.log("phone fail");
+    	//console.log("phone fail");
     }
     viper.logRequest(req);
     match=viper.findMatch(req, "buy", sellerSearchCB);
@@ -74,7 +89,7 @@ function sellerSearchCB(err, result){
     	//app.send("public/fail.html");
         
         io.sockets.emit('failed', { error: 'failed to validate' });
-        console.log("emitting Fail");
+        //console.log("emitting Fail");
         return;
     }
 }

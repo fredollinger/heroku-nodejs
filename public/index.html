@@ -22,20 +22,19 @@
 	<h1>Tue, 26 Aug 2014 19:34:17 -0700</h1>
     	</div>
 
-	<div>
-        <!--
-    	<form action="test">
-        -->
-
-    	<form>
-		<input name="address" placeholder="Enter location/address">
-		<input name="plate_number" placeholder="Enter license plate number">
+	<div ng-controller="FormController">
+    	<form novalidate class="simple-form">
+		<input name="address" ng-model="user.address" placeholder="Enter location/address">
+		<input name="plate_number" ng-model="user.plate_number" placeholder="Enter license plate number">
 		<div ng-controller="PhoneController" ><font color="red">{{error}}</font></div>
-		<input name="phone_number" placeholder="Enter phone number">
-		<input name="price" placeholder="Enter price">
+		<input name="phone_number" ng-model="user.phone_number"  placeholder="Enter phone number">
+		<input name="price" ng-model="user.price"  placeholder="Enter price">
 		<input type="submit" formaction="buy" value="Want Parking Spot" >
         <button onclick="sell(this.form)">Sell Parking Spot</button>
-        </form></div>
+        </form>
+        <pre>form = {{user | json}}</pre>
+        <pre>master = {{master | json}}</pre>
+        </div>
         <p>
 	Looking for parking close to where you are? This spot is for you.
         </p>
@@ -44,10 +43,15 @@
         </p>
     	</div>
 
+<script src="/socket.io/socket.io.js"></script>
 <script>
-    function PhoneController($scope){
-	$scope.error='';
-    }
+function PhoneController($scope){
+    $scope.error='';
+}
+
+function FormController($scope){
+    $scope.error='';
+}
 
     angular.module("autocrest", [])
     .controller("ErrorController", function($scope) {
@@ -55,22 +59,17 @@
     $scope.errorTo.title = "World, AutoCrest";
     $scope.errorTo.phone = "*";
     });
-</script>
 
-<script src="/socket.io/socket.io.js"></script>
-<script>
   var socket = io.connect('http://localhost');
 
   function sell(data){ 
-      socket.emit('sell', { error: 'failed to validate' });
-	  socket.emit('my other event', { my: 'data' });
-      console.log("sell");
-      //alert("stub");
+      socket.emit('sell', data);
+      console.log(data.address.value);
+      //console.log(data.class);
   }
 
   socket.on('news', function (data) {
       console.log(data);
-      alert("news");
 	  // socket.emit('my other event', { my: 'data' });
       window.stop();
   });
@@ -78,9 +77,20 @@
   socket.on('failed', function (data) {
       //io.sockets.emit('failed', { error: 'failed to validate' });
       console.log("failed");
-      alert("failed");
       window.stop();
   });
+
+/*
+angular.module('formExample', [])
+.controller('FormController', ['$scope', function($scope) {
+$scope.master = {};
+
+    $scope.update = function(user) {
+        $scope.master = angular.copy(user);
+    };
+
+}]);
+*/
 
 </script>
 
