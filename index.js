@@ -37,11 +37,10 @@ io.on('connection', function (socket) {
     });
 
     socket.on('sell', function (data) {
-        //console.log(data.user.address);
+        console.log(data.price);
         //io.sockets.emit('failed', { error: 'failed to validate' });
         return;
     });
-
 
     socket.on('failed', function (data) {
         //console.log("failed");

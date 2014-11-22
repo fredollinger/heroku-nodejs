@@ -62,11 +62,30 @@ function FormController($scope){
 
   var socket = io.connect('http://localhost');
 
-  function sell(data){ 
-      socket.emit('sell', data);
-      console.log(data.address.value);
-      //console.log(data.class);
-  }
+function transact(transaction, data){ 
+    socket.emit(transaction, { 
+        address: data.address.value,
+        phone_number: data.phone_number.value,
+        price: data.price.value, 
+        plate_number: data.plate_number.value 
+    }); // END socket.emit
+}
+
+function buy(data){ 
+    transact("buy", data);
+}
+
+function sell(data){ 
+    transact("sell", data);
+/*
+    socket.emit('sell', { 
+        address: data.address.value,
+        phone_number: data.phone_number.value,
+        price: data.price.value, 
+        plate_number: data.plate_number.value 
+    }); // END socket.emit
+*/
+} // END sell()
 
   socket.on('news', function (data) {
       console.log(data);
