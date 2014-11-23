@@ -2,11 +2,10 @@ var mongoose = require('mongoose');
 var now = require('mout/time/now');
 
 function ACViper() {
-    console.log('viper init');
-    //mongoose.connect('mongodb://localhost/db');
+    //console.log('viper init');
     mongoose.connect('localhost', 'Customers');
 
-    this.findMatch = function (req, request, callback){
+    this.findMatch = function (data, request, callback){
         var m = mongoose.model('Customers', this.userSchema);
         console.log('search for: [%s] ', request);
 
@@ -38,7 +37,7 @@ function ACViper() {
           Customer.save(function(err) {
 	      console.log("saving");
 	      if (!err) {
-	          console.log('[%s] saved.', req.query.request );
+	          console.log('[%s] saved.', query.request );
 	      }
 	      else
                   console.log(err);

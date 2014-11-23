@@ -30,6 +30,13 @@ function getMethods(obj) {
 function transact(data){
     console.log("trans: [" + data.request + "]");
     console.log("plate number: [" + data.price + "]");
+    viper.logRequest(data);
+    if ( "buy" == data.request){
+        viper.findMatch(data, "sell", buyerSearchCB);
+    }
+    if ( "sell" == data.request){
+        viper.findMatch(data, "sell", sellerSearchCB);
+    }
 }
 
 io.on('connection', function (socket) {
@@ -48,9 +55,7 @@ io.on('connection', function (socket) {
 
 app.get('/buy*', function(req, res) {
     req["transaction"] = "buy";
-    //console.log("trans: [%s]", req.transaction);
     viper.logRequest(req);
-    //console.log("buy");
     match=viper.findMatch(req, "sell", buyerSearchCB);
     if ( null != match ){
     	res.sendfile("public/success.html");
@@ -80,23 +85,22 @@ app.get('/sell*', function(req, res) {
  * which means they searched for a "buy" match. */
 function sellerSearchCB(err, result){
     if ( null != result ){
-    	app.sendfile("public/success.html");
+        io.sockets.emit('success', { error: 'failed to validate' });
     }
     else{
-    	//app.send("public/fail.html");
-        
         io.sockets.emit('failed', { error: 'failed to validate' });
-        //console.log("emitting Fail");
         return;
     }
 }
 
 function buyerSearchCB(err, result){
     if ( null != result ){
-    	app.sendfile("public/success.html");
+	console.log("buyer success");
+        io.sockets.emit('success', { error: 'failed to validate' });
     }
     else{
-    	app.sendfile("public/fail.html");
+	console.log("buyer fail");
+        io.sockets.emit('fail', { error: 'failed to validate' });
     }
 }
 
