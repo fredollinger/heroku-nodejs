@@ -85,22 +85,22 @@ app.get('/sell*', function(req, res) {
  * which means they searched for a "buy" match. */
 function sellerSearchCB(err, result){
     if ( null != result ){
-        io.sockets.emit('success', { error: 'failed to validate' });
+        io.sockets.emit('success',  result );
     }
     else{
-        io.sockets.emit('failed', { error: 'failed to validate' });
+        io.sockets.emit('failed',  result );
         return;
     }
 }
 
 function buyerSearchCB(err, result){
     if ( null != result ){
-	console.log("buyer success");
-        io.sockets.emit('success', { error: 'failed to validate' });
+        console.log("buyer success");
+        io.sockets.emit('success',  result );
     }
     else{
-	console.log("buyer fail");
-        io.sockets.emit('fail', { error: 'failed to validate' });
+        console.log("buyer fail");
+        io.sockets.emit('fail',  result );
     }
 }
 

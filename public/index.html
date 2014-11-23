@@ -80,10 +80,16 @@ function sell(data){
     transact("sell", data);
 }
 
+/*
   socket.on('news', function (data) {
       console.log(data);
 	  // socket.emit('my other event', { my: 'data' });
       window.stop();
+  });
+*/
+
+  socket.on('success', function (result) {
+      console.log(result);
   });
 
   socket.on('failed', function (data) {
