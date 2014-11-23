@@ -63,11 +63,12 @@ function FormController($scope){
   var socket = io.connect('http://localhost');
 
 function transact(transaction, data){ 
-    socket.emit(transaction, { 
+    socket.emit("transaction", { 
         address: data.address.value,
         phone_number: data.phone_number.value,
         price: data.price.value, 
-        plate_number: data.plate_number.value 
+        plate_number: data.plate_number.value,
+        request: transaction 
     }); // END socket.emit
 }
 

@@ -24,15 +24,15 @@ function ACViper() {
        request: { type: String } // "buy" or "sell"
     }); // END userSchema
 
-    this.logRequest = function (req){
+    this.logRequest = function (query){
     	var m = mongoose.model('Customers', this.userSchema);
     	var Customer = new m ({
-            address: req.query.address,
-            plate_number: req.query.plate_number,
-            phone_number: req.query.phone_number,
-            price: req.query.price,
+            address: query.address,
+            plate_number: query.plate_number,
+            phone_number: query.phone_number,
+            price: query.price,
     	    date: now(),
-            request: req.query.request
+            request: query.request
           });  // END Buyer
 
           Customer.save(function(err) {

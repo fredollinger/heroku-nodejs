@@ -27,8 +27,8 @@ function getMethods(obj) {
     return result;
 }
 
-function transact(transaction, data){
-    console.log("trans: [" + transaction + "]");
+function transact(data){
+    console.log("trans: [" + data.request + "]");
     console.log("plate number: [" + data.price + "]");
 }
 
@@ -36,15 +36,8 @@ io.on('connection', function (socket) {
     console.log("Connection!!");
     //socket.emit('news', { hello: 'world' });
     
-    socket.on('sell', function (data) {
-        //console.log(data.price);
-	transact("sell", data);
-        return;
-    });
-
-    socket.on('buy', function (data) {
-        //console.log(data.price);
-	transact("buy", data);
+    socket.on('transaction', function (data) {
+	transact(data);
         return;
     });
 
