@@ -29,8 +29,8 @@
 		<div ng-controller="PhoneController" ><font color="red">{{error}}</font></div>
 		<input name="phone_number" ng-model="user.phone_number"  placeholder="Enter phone number">
 		<input name="price" ng-model="user.price"  placeholder="Enter price">
-		<input type="submit" formaction="buy" value="Want Parking Spot" >
         <button onclick="sell(this.form)">Sell Parking Spot</button>
+        <button onclick="buy(this.form)">Buy Parking Spot</button>
         </form>
         <pre>form = {{user | json}}</pre>
         <pre>master = {{master | json}}</pre>
@@ -77,15 +77,7 @@ function buy(data){
 
 function sell(data){ 
     transact("sell", data);
-/*
-    socket.emit('sell', { 
-        address: data.address.value,
-        phone_number: data.phone_number.value,
-        price: data.price.value, 
-        plate_number: data.plate_number.value 
-    }); // END socket.emit
-*/
-} // END sell()
+}
 
   socket.on('news', function (data) {
       console.log(data);

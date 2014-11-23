@@ -27,25 +27,30 @@ function getMethods(obj) {
     return result;
 }
 
+function transact(transaction, data){
+    console.log("trans: [" + transaction + "]");
+    console.log("plate number: [" + data.price + "]");
+}
+
 io.on('connection', function (socket) {
     console.log("Connection!!");
-    //console.log(socket.methods);
     //socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
-        //console.log(data);
+    
+    socket.on('sell', function (data) {
+        //console.log(data.price);
+	transact("sell", data);
         return;
     });
 
-    socket.on('sell', function (data) {
-        console.log(data.price);
-        //io.sockets.emit('failed', { error: 'failed to validate' });
+    socket.on('buy', function (data) {
+        //console.log(data.price);
+	transact("buy", data);
         return;
     });
 
     socket.on('failed', function (data) {
         //console.log("failed");
     });
-    // socket.emit('news', { hello: 'world' });
 });
 
 app.get('/buy*', function(req, res) {
