@@ -102,6 +102,6 @@ function buyerSearchCB(err, result){
         console.log("buyer fail");
         io.sockets.emit('fail',  result );
     }
-}
+} // ENDbuyerSerachCB
 
 server.listen(process.env.PORT || 3000);

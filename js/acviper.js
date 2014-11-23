@@ -9,8 +9,15 @@ function ACViper() {
         var m = mongoose.model('Customers', this.userSchema);
         console.log('search for: [%s] ', request);
 
-        var query=m.findOne({ 'request': request });
-	query.select('phone_number');
+        var query=m.findOne({ 'request': request }, {
+	    phone_number: 1,
+	    plate_number: 1,
+	    address: 1,
+	    request: 1,
+	    price: 1,
+	    _id: 0
+	});
+	//query.select('phone_number');
 	query.exec(callback);
     } // END findMatch
 
