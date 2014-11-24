@@ -8,7 +8,6 @@
 	<script src="core.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 
-
         <title>AutoCrest</title>
     </head>
     <body ng-app="autocrest">
@@ -18,11 +17,12 @@
         </div>
 
     	<div>
-        <h1>AutoCrest</h1>
-	<h1>Tue, 26 Aug 2014 19:34:17 -0700</h1>
-    	</div>
+        <h1>AutoCrest</h1><h1>
+        Sun Nov 23 15:11:01 PST 2014
+        </h1></div>
 
-	<div ng-controller="FormController">
+	<div id="entryForm" ng-show="showForm()" ng-controller="FormController">
+	<br>
     	<form novalidate class="simple-form">
 		<input name="address" ng-model="user.address" placeholder="Enter location/address">
 		<input name="plate_number" ng-model="user.plate_number" placeholder="Enter license plate number">
@@ -32,16 +32,18 @@
         <button onclick="sell(this.form)">Sell Parking Spot</button>
         <button onclick="buy(this.form)">Buy Parking Spot</button>
         </form>
+	<!--
         <pre>form = {{user | json}}</pre>
         <pre>master = {{master | json}}</pre>
-        </div>
+	-->
+	<br>
         <p>
 	Looking for parking close to where you are? This spot is for you.
         </p>
         <p>
 	Advertise or buy parking. Choose one. All transactions are to be negotiated between the parker and parkee. AutoCrest is not responsible for guarantee of parking spots, payment, or liability resulting from this sites use.
         </p>
-    	</div>
+        </div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -51,7 +53,25 @@ function PhoneController($scope){
 
 function FormController($scope){
     $scope.error='';
-}
+
+    $scope.showForm = function (res){ 
+	console.log("show form cached: [" + $scope.showForm.cached + "]");
+	console.log("show form res: [" + $scope.showForm.cached + "]");
+
+	if(res != undefined){
+	    $scope.showForm.cached=res;
+	    return res;
+	}
+
+	// res == undefined do we hae cached?
+        if ($scope.showForm.cached == undefined){
+	    return true;
+        }
+
+	return $scope.showForm.cached;
+    } // END showForm()
+
+} // END FormController()
 
     angular.module("autocrest", [])
     .controller("ErrorController", function($scope) {
@@ -80,37 +100,20 @@ function sell(data){
     transact("sell", data);
 }
 
-/*
-  socket.on('news', function (data) {
-      console.log(data);
-	  // socket.emit('my other event', { my: 'data' });
-      window.stop();
-  });
-*/
+socket.on('success', function (result) {
+    var scope = angular.element( document.getElementById("entryForm")).
+    scope();
+    scope.$apply(function () {
+        scope.showForm(false);
+    });
+    //console.log(scope);
+});
 
-  socket.on('success', function (result) {
-      console.log(result);
-  });
+socket.on('failed', function (data) {
+    //io.sockets.emit('failed', { error: 'failed to validate' });
+    console.log("failed");
+    window.stop();
+});
 
-  socket.on('failed', function (data) {
-      //io.sockets.emit('failed', { error: 'failed to validate' });
-      console.log("failed");
-      window.stop();
-  });
-
-/*
-angular.module('formExample', [])
-.controller('FormController', ['$scope', function($scope) {
-$scope.master = {};
-
-    $scope.update = function(user) {
-        $scope.master = angular.copy(user);
-    };
-
-}]);
-*/
-
-</script>
-
-</body></html>
+</script></body></html>
 

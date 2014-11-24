@@ -12,21 +12,6 @@ var viper = new ACViper();
 
 app.use(express.static(__dirname + '/public'));
 
-function getMethods(obj) {
-    var result = [];
-    for (var id in obj) {
-        try {
-            if (typeof(obj[id]) == "function") {
-                result.push(id + ": " + obj[id].toString());
-            }
-        }
-        catch (err) {
-            result.push(id + ": inaccessible");
-        }
-    }
-    return result;
-}
-
 function transact(data){
     console.log("trans: [" + data.request + "]");
     console.log("plate number: [" + data.price + "]");
@@ -49,9 +34,8 @@ io.on('connection', function (socket) {
     });
 
     socket.on('failed', function (data) {
-        //console.log("failed");
     });
-});
+}); // END io.on()
 
 app.get('/buy*', function(req, res) {
     req["transaction"] = "buy";
@@ -102,6 +86,8 @@ function buyerSearchCB(err, result){
         console.log("buyer fail");
         io.sockets.emit('fail',  result );
     }
-} // ENDbuyerSerachCB
+} // END buyerSerachCB()
+
+console.log("Autocrest Started");
 
 server.listen(process.env.PORT || 3000);
