@@ -21,6 +21,10 @@
         Sun Nov 23 15:11:01 PST 2014
         </h1></div>
 
+	<div id="resultsForm" ng-show="showForm()" ng-controller="ResultsController">
+		<h1>Plate Number: {{plate_number}}</h1>
+	</div>
+
 	<div id="entryForm" ng-show="showForm()" ng-controller="FormController">
 	<br>
     	<form novalidate class="simple-form">
@@ -51,13 +55,31 @@ function PhoneController($scope){
     $scope.error='';
 }
 
+function ResultsController($scope){
+    $scope.showForm = function (res){ 
+	defaultValue=false;
+	if(res != undefined){
+	    $scope.showForm.cached=res;
+	    console.log("ResultsController.showForm() [" + res + "]");
+	    return res;
+	}
+
+	// res == undefined do we hae cached?
+        if ($scope.showForm.cached == undefined){
+	    console.log("ResultsController.showForm() [" + defaultValue + "]");
+	    return defaultValue;
+        }
+        console.log("ResultsController.showForm() [" + $scope.showForm.cached + "]");
+	return $scope.showForm.cached;
+    } // END showForm()
+
+}  // END ResultsController()
+
 function FormController($scope){
     $scope.error='';
 
     $scope.showForm = function (res){ 
-	console.log("show form cached: [" + $scope.showForm.cached + "]");
-	console.log("show form res: [" + $scope.showForm.cached + "]");
-
+	defaultValue=true;
 	if(res != undefined){
 	    $scope.showForm.cached=res;
 	    return res;
@@ -65,7 +87,7 @@ function FormController($scope){
 
 	// res == undefined do we hae cached?
         if ($scope.showForm.cached == undefined){
-	    return true;
+	    return defaultValue;
         }
 
 	return $scope.showForm.cached;
@@ -100,12 +122,24 @@ function sell(data){
     transact("sell", data);
 }
 
+function showForm(form, bool){
+    var scope = angular.element( document.getElementById(form)).
+    scope();
+    scope.$apply(function () {
+        scope.showForm(bool);
+    });
+}
+
 socket.on('success', function (result) {
+    showForm("entryForm", false);
+    showForm("resultsForm", true);
+    /*
     var scope = angular.element( document.getElementById("entryForm")).
     scope();
     scope.$apply(function () {
         scope.showForm(false);
     });
+    */
     //console.log(scope);
 });
 
