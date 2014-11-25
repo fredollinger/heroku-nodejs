@@ -78,6 +78,9 @@ function sellerSearchCB(err, result){
 }
 
 function buyerSearchCB(err, result){
+    console.log("FAIL");
+    io.sockets.emit('fail',  result );
+    /*
     if ( null != result ){
         console.log("buyer success");
         io.sockets.emit('success',  result );
@@ -86,6 +89,7 @@ function buyerSearchCB(err, result){
         console.log("buyer fail");
         io.sockets.emit('fail',  result );
     }
+    */
 } // END buyerSerachCB()
 
 console.log("Autocrest Started");

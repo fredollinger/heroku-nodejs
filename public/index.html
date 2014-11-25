@@ -5,15 +5,14 @@
 	<link rel="stylesheet" href="themes/simplecozy.css" type="text/css" media="screen" />
         </script>
         <script type="text/javascript" src="core.js"> </script>
-	<!-- <script type="text/javascript" src=> </script> -->
-	<script type="text/javascript"
-        src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
 	<script src="core.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 
         <title>AutoCrest</title>
     </head>
-    <body ng-app="autocrest">
+
+    <body data-ng-app="autocrest">
 
 	<div ng-controller="ErrorController" >
         <h1>AutoCrest</h1><h1>
@@ -39,17 +38,19 @@
         <button onclick="sell(this.form)">Sell Parking Spot</button>
         <button onclick="buy(this.form)">Buy Parking Spot</button>
         </form>
-	<!--
-        <pre>form = {{user | json}}</pre>
-        <pre>master = {{master | json}}</pre>
-	-->
+	<!-- <pre>form = {{user | json}}</pre> -->
 	<br>
+	{{output.message}}
+<!--
+
         <p>
 	Looking for parking close to where you are? This spot is for you.
         </p>
         <p>
 	Advertise or buy parking. Choose one. All transactions are to be negotiated between the parker and parkee. AutoCrest is not responsible for guarantee of parking spots, payment, or liability resulting from this sites use.
         </p>
+
+-->
         </div>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -61,7 +62,6 @@ function PhoneController($scope){
 function ResultsController($scope){
 
     $scope.setResults = function (data){ 
-	console.log("setResults: [" + data.plate_number + "]");
         $scope.results = {};
         $scope.results.plate_number = data.plate_number;
         $scope.results.phone_number = data.phone_number;
@@ -86,6 +86,13 @@ function ResultsController($scope){
 
 function FormController($scope){
     $scope.error='';
+
+    $scope.output = {};
+    $scope.output.message = "Looking for parking close to where you are? This spot is for you.  Advertise or buy parking. Choose one. All transactions are to be negotiated between the parker and parkee. AutoCrest is not responsible for guarantee of parking spots, payment, or liability resulting from this sites use.";
+
+    $scope.setOutput = function (data){ 
+        $scope.output.message = data;
+    }
 
     $scope.showForm = function (res){ 
 	defaultValue=true;
@@ -143,23 +150,27 @@ socket.on('success', function (result) {
     showForm("entryForm", false);
     showForm("resultsForm", true);
     googleapi="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvvMm5j7hlVOs20mb0qjmKcGV3nj53I9o";
-    var scope = angular.element( document.getElementById("resultsForm")).
-    scope();
+    var scope = angular.element( document.getElementById("resultsForm")).scope();
     scope.$apply(function () {
         scope.setResults(result);
     });
 
+    /*
     loadScript(googleapi, function(){
         google.maps.event.addDomListener(window, 'load', initialize);
     });
+    */
 
     //console.log(scope);
 });
 
-socket.on('failed', function (data) {
+socket.on('fail', function (data) {
     //io.sockets.emit('failed', { error: 'failed to validate' });
     console.log("failed");
-    window.stop();
+    var scope = angular.element( document.getElementById("entryForm")).scope();
+    scope.$apply(function () {
+        scope.setOutput("Validation error. Fill in red fields with proper results.");
+    });
 });
 
 function initialize() {
