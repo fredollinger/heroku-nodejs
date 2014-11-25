@@ -5,7 +5,7 @@ var io = require('socket.io')(server);
 var now = require('mout/time/now');
 
 var ACValidater = require('./js/acvalidater.js');
-var validate = new ACValidater();
+var validator = new ACValidater();
 
 var ACViper = require('./js/acviper.js');
 var viper = new ACViper();
@@ -22,21 +22,40 @@ function transact(data){
     if ( "sell" == data.request){
         viper.findMatch(data, "sell", sellerSearchCB);
     }
+} // END transact()
+
+function validate(data){
+    var result = {
+        success: true,
+    };
+    console.log("validating: [" + data.phone_number + "]");
+    if (!validator.phoneNumber(data.phone_number)){
+        result.success=false;
+    }
+    return result;
 }
+
 
 io.on('connection', function (socket) {
     console.log("Connection!!");
     //socket.emit('news', { hello: 'world' });
     
     socket.on('transaction', function (data) {
+	valid=validate(data);
+        if ( ! valid.success ){
+    	    console.log("Validation FAIL.");
+            io.sockets.emit('fail',  valid );
+	    return;
+        } 
 	transact(data);
         return;
-    });
+    }); // END socket.on('transaction');
 
-    socket.on('failed', function (data) {
-    });
+    //socket.on('failed', function (data) {
+    //});
 }); // END io.on()
 
+/*
 app.get('/buy*', function(req, res) {
     req["transaction"] = "buy";
     viper.logRequest(req);
@@ -64,6 +83,7 @@ app.get('/sell*', function(req, res) {
     res.redirect('/?status=validating');
 
 }); // app.get('/sell*')
+*/
 
 /* Searcher is seller 
  * which means they searched for a "buy" match. */
