@@ -19,6 +19,8 @@
 
 	<div id="resultsForm" ng-show="showForm()" ng-controller="ResultsController">
 		<h1>Plate Number: {{results.plate_number}}</h1>
+		<h1>Phone Number: {{results.phone_number}}</h1>
+		<h1>Price: ${{results.price}}</h1>
 	</div>
 
 	<div id="entryForm" ng-show="showForm()" ng-controller="FormController">
@@ -57,6 +59,8 @@ function ResultsController($scope){
 	console.log("setResults: [" + data.plate_number + "]");
         $scope.results = {};
         $scope.results.plate_number = data.plate_number;
+        $scope.results.phone_number = data.phone_number;
+        $scope.results.price = data.price;
     }
 
     $scope.showForm = function (res){ 
