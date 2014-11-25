@@ -13,16 +13,12 @@
     <body ng-app="autocrest">
 
 	<div ng-controller="ErrorController" >
-        <h1>Hello {{errorTo.title}}</h1>
-        </div>
-
-    	<div>
         <h1>AutoCrest</h1><h1>
-        Sun Nov 23 15:11:01 PST 2014
+        Mon Nov 24 18:37:24 PST 2014
         </h1></div>
 
 	<div id="resultsForm" ng-show="showForm()" ng-controller="ResultsController">
-		<h1>Plate Number: {{plate_number}}</h1>
+		<h1>Plate Number: {{results.plate_number}}</h1>
 	</div>
 
 	<div id="entryForm" ng-show="showForm()" ng-controller="FormController">
@@ -56,20 +52,24 @@ function PhoneController($scope){
 }
 
 function ResultsController($scope){
+
+    $scope.setResults = function (data){ 
+	console.log("setResults: [" + data.plate_number + "]");
+        $scope.results = {};
+        $scope.results.plate_number = data.plate_number;
+    }
+
     $scope.showForm = function (res){ 
 	defaultValue=false;
 	if(res != undefined){
 	    $scope.showForm.cached=res;
-	    console.log("ResultsController.showForm() [" + res + "]");
 	    return res;
 	}
 
 	// res == undefined do we hae cached?
         if ($scope.showForm.cached == undefined){
-	    console.log("ResultsController.showForm() [" + defaultValue + "]");
 	    return defaultValue;
         }
-        console.log("ResultsController.showForm() [" + $scope.showForm.cached + "]");
 	return $scope.showForm.cached;
     } // END showForm()
 
@@ -133,13 +133,11 @@ function showForm(form, bool){
 socket.on('success', function (result) {
     showForm("entryForm", false);
     showForm("resultsForm", true);
-    /*
-    var scope = angular.element( document.getElementById("entryForm")).
+    var scope = angular.element( document.getElementById("resultsForm")).
     scope();
     scope.$apply(function () {
-        scope.showForm(false);
+        scope.setResults(result);
     });
-    */
     //console.log(scope);
 });
 
