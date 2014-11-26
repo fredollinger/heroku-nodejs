@@ -1,8 +1,11 @@
 function ACValidator() {
-    console.log('acvalid init');
-
     this.validateAll = function (res){
         return false;
+    }
+
+    this.isNumber = function (o) {
+	console.log("testing: [" + o + "]");
+        return ! isNaN (o-0) && o !== null && o !== "" && o !== false;
     }
 
     this.phoneNumber = function (p){

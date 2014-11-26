@@ -27,13 +27,20 @@ function transact(data){
 function validate(data){
     var result = {
         success: true,
-	phone_number: "valid"
+	address: "valid",
+	phone_number: "valid",
+	plate_number: "valid",
+	price: "valid"
     };
-    console.log("validating: [" + data.phone_number + "]");
     if (!validator.phoneNumber(data.phone_number)){
         result.success=false;
         result.phone_number="invalid";
     }
+    if (!validator.isNumber(data.price)){
+        result.success=false;
+        result.price="invalid";
+    }
+
     return result;
 }
 

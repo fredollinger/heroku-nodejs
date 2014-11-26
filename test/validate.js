@@ -4,6 +4,24 @@ load("test/common.js");
 load("js/acvalidater.js");
 
 vali = new ACValidator();
+
+number="6";
+if (vali.isNumber(number)){
+    console.log("isNumber() test 1 passed");
+}
+else{
+    console.log("FAIL: validate isNumber()");
+}
+
+number="";
+if (!vali.isNumber(number)){
+    console.log("isNumber() test 2 passed");
+}
+else{
+    console.log("isNumber() failed to invalidate blank");
+}
+
+/*
 number="619-867-5309"
 
 if (vali.phoneNumber(number)){
@@ -40,3 +58,4 @@ if (!vali.isNumber(number)){
 else{
     console.log("failed to invalidate a purposefully invalid price number");
 }
+*/

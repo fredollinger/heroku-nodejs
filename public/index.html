@@ -27,30 +27,18 @@
 		<h1>Price: ${{results.price}}</h1>
 	</div>
 
-	<div id="entryForm" ng-show="showForm()" ng-controller="FormController">
-	<br>
-    	<form novalidate class="simple-form">
-		<input name="address" ng-model="user.address" placeholder="Enter location/address">
-		<input name="plate_number" ng-model="user.plate_number" placeholder="Enter license plate number">
-		<div ng-controller="PhoneController" ><font color="red">{{error}}</font></div>
-		<input id="phone_number_input" name="phone_number" ng-model="user.phone_number"  placeholder="Enter phone number">
-		<input name="price" ng-model="user.price"  placeholder="Enter price">
-        <button onclick="sell(this.form)">Sell Parking Spot</button>
-        <button onclick="buy(this.form)">Buy Parking Spot</button>
-        </form>
-	<!-- <pre>form = {{user | json}}</pre> -->
-	<br>
-	{{output.message}}
-<!--
-
-        <p>
-	Looking for parking close to where you are? This spot is for you.
-        </p>
-        <p>
-	Advertise or buy parking. Choose one. All transactions are to be negotiated between the parker and parkee. AutoCrest is not responsible for guarantee of parking spots, payment, or liability resulting from this sites use.
-        </p>
-
--->
+	<div id="entryForm" ng-show="showForm()" ng-controller="FormController"><br>
+    	    <form novalidate class="simple-form">
+	    <input id="address" name="address" ng-model="user.address" placeholder="Enter location/address">
+	    <input id="plate_number" name="plate_number" ng-model="user.plate_number" placeholder="Enter license plate number">
+	    <div ng-controller="PhoneController" ><font color="red">{{error}}</font></div>
+	    <input id="phone_number" name="phone_number" ng-model="user.phone_number"  placeholder="Enter phone number">
+	    <input id="price" name="price" ng-model="user.price"  placeholder="Enter price">
+            <button onclick="sell(this.form)">Sell Parking Spot</button>
+            <button onclick="buy(this.form)">Buy Parking Spot</button>
+            </form>
+	<!-- <pre>form = {{user | json}}</pre> --><br>
+	    {{output.message}}
         </div>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -111,14 +99,14 @@ function FormController($scope){
 
 } // END FormController()
 
-    angular.module("autocrest", [])
+angular.module("autocrest", [])
     .controller("ErrorController", function($scope) {
     $scope.errorTo = {};
     $scope.errorTo.title = "World, AutoCrest";
     $scope.errorTo.phone = "*";
-    });
+});
 
-  var socket = io.connect('http://localhost');
+var socket = io.connect('http://localhost');
 
 function transact(transaction, data){ 
     socket.emit("transaction", { 
@@ -128,7 +116,7 @@ function transact(transaction, data){
         plate_number: data.plate_number.value,
         request: transaction 
     }); // END socket.emit
-}
+} // END transact()
 
 function buy(data){ 
     transact("buy", data);
@@ -162,17 +150,31 @@ socket.on('success', function (result) {
     */
 
     //console.log(scope);
-});
+}); // socket.on('success');
 
-function colorInputFields(result){
-    var phone_number_input = document.getElementById("phone_number_input");
-    if ( "invalid" == result.phone_number ){
-        console.log("phone_number status: [" + result + "]");
-	phone_number_input.style.backgroundColor = "red"; 
+function colorFieldById(id, result){
+    console.log("colorFieldById: [" + id + "] [" + result[id] + "]");
+    var element = document.getElementById(id);
+    if ( "invalid" == result[id] ){
+	element.style.backgroundColor = "red"; 
     }
     else{
-	phone_number_input.style.backgroundColor = "white"; 
+	element.style.backgroundColor = "white"; 
+    }
+} // END colorFieldById()
+
+function colorInputFields(result){
+    colorFieldById("phone_number", result);
+    colorFieldById("price", result);
+    /*
+    var element = document.getElementById("phone_number");
+    if ( "invalid" == result["phone_number"] ){
+	element.style.backgroundColor = "red"; 
+    }
+    else{
+	element.style.backgroundColor = "white"; 
     } 
+    */
 } // END colorInputFields()  
 
 socket.on('fail', function (result) {
