@@ -41,8 +41,18 @@ function validate(data){
         result.price="invalid";
     }
 
+    if (!validator.isAlphaNumber(data.address)){
+        result.success=false;
+        result.address="invalid";
+    }
+
+    if (!validator.isAlphaNumber(data.plate_number)){
+        result.success=false;
+        result.plate_number="invalid";
+    }
+
     return result;
-}
+} // END validate()
 
 
 io.on('connection', function (socket) {
@@ -64,36 +74,6 @@ io.on('connection', function (socket) {
     //});
 }); // END io.on()
 
-/*
-app.get('/buy*', function(req, res) {
-    req["transaction"] = "buy";
-    viper.logRequest(req);
-    match=viper.findMatch(req, "sell", buyerSearchCB);
-    if ( null != match ){
-    	res.sendfile("public/success.html");
-    }
-    else{
-    	res.sendfile("public/fail.html");
-    }
-}); // app.get()
-
-app.get('/sell*', function(req, res) {
-    req["transaction"] = "sell";
-    //console.log("trans: [%s]", req.transaction);
-    if (validate.phoneNumber(req.query.phone_number)){
-    	//console.log("phone success");
-    }
-    else{
-    	//console.log("phone fail");
-    }
-    viper.logRequest(req);
-    match=viper.findMatch(req, "buy", sellerSearchCB);
-
-    res.redirect('/?status=validating');
-
-}); // app.get('/sell*')
-*/
-
 /* Searcher is seller 
  * which means they searched for a "buy" match. */
 function sellerSearchCB(err, result){
@@ -109,6 +89,7 @@ function sellerSearchCB(err, result){
 function buyerSearchCB(err, result){
     console.log("FAIL");
     io.sockets.emit('fail',  result );
+
     /*
     if ( null != result ){
         console.log("buyer success");
@@ -119,6 +100,7 @@ function buyerSearchCB(err, result){
         io.sockets.emit('fail',  result );
     }
     */
+
 } // END buyerSerachCB()
 
 console.log("Autocrest Started");

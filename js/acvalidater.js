@@ -3,6 +3,13 @@ function ACValidator() {
         return false;
     }
 
+    this.isAlphaNumber = function (variable) {
+        if ( variable === undefined || variable === null || "" == variable ) {
+	    return false;
+        }
+	return true;
+    }
+
     this.isNumber = function (o) {
 	console.log("testing: [" + o + "]");
         return ! isNaN (o-0) && o !== null && o !== "" && o !== false;

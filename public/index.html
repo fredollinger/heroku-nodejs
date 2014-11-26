@@ -166,15 +166,8 @@ function colorFieldById(id, result){
 function colorInputFields(result){
     colorFieldById("phone_number", result);
     colorFieldById("price", result);
-    /*
-    var element = document.getElementById("phone_number");
-    if ( "invalid" == result["phone_number"] ){
-	element.style.backgroundColor = "red"; 
-    }
-    else{
-	element.style.backgroundColor = "white"; 
-    } 
-    */
+    colorFieldById("address", result);
+    colorFieldById("plate_number", result);
 } // END colorInputFields()  
 
 socket.on('fail', function (result) {
