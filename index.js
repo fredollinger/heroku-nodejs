@@ -27,10 +27,12 @@ function transact(data){
 function validate(data){
     var result = {
         success: true,
+	phone_number: "valid"
     };
     console.log("validating: [" + data.phone_number + "]");
     if (!validator.phoneNumber(data.phone_number)){
         result.success=false;
+        result.phone_number="invalid";
     }
     return result;
 }

@@ -33,7 +33,7 @@
 		<input name="address" ng-model="user.address" placeholder="Enter location/address">
 		<input name="plate_number" ng-model="user.plate_number" placeholder="Enter license plate number">
 		<div ng-controller="PhoneController" ><font color="red">{{error}}</font></div>
-		<input name="phone_number" ng-model="user.phone_number"  placeholder="Enter phone number">
+		<input id="phone_number_input" name="phone_number" ng-model="user.phone_number"  placeholder="Enter phone number">
 		<input name="price" ng-model="user.price"  placeholder="Enter price">
         <button onclick="sell(this.form)">Sell Parking Spot</button>
         <button onclick="buy(this.form)">Buy Parking Spot</button>
@@ -164,14 +164,26 @@ socket.on('success', function (result) {
     //console.log(scope);
 });
 
-socket.on('fail', function (data) {
+function colorInputFields(result){
+    var phone_number_input = document.getElementById("phone_number_input");
+    if ( "invalid" == result.phone_number ){
+        console.log("phone_number status: [" + result + "]");
+	phone_number_input.style.backgroundColor = "red"; 
+    }
+    else{
+	phone_number_input.style.backgroundColor = "white"; 
+    } 
+} // END colorInputFields()  
+
+socket.on('fail', function (result) {
     //io.sockets.emit('failed', { error: 'failed to validate' });
-    console.log("failed");
+    console.log("failed: [" + result + "]");
     var scope = angular.element( document.getElementById("entryForm")).scope();
     scope.$apply(function () {
         scope.setOutput("Validation error. Fill in red fields with proper results.");
     });
-});
+    colorInputFields(result);
+}); // END socket.on('fail')
 
 function initialize() {
     var mapOptions = {
