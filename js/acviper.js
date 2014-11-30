@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var now = require('mout/time/now');
 
 function ACViper() {
-    //console.log('viper init');
     mongoose.connect('localhost', 'Customers');
 
     this.findMatch = function (data, request, callback){
@@ -17,7 +16,6 @@ function ACViper() {
 	    price: 1,
 	    _id: 0
 	});
-	//query.select('phone_number');
 	query.exec(callback);
     } // END findMatch
 

@@ -2,13 +2,14 @@
 <html>
   <head>
   <link rel="stylesheet" href="themes/simplecozy.css" type="text/css" media="screen" /> 
-    <style type="text/css">
-      html, body, #map-canvas { height: 80%; margin: 50; padding: 50;}
-    </style>
+  <!-- <style type="text/css"> html, body, #map-canvas { height: 80%; margin: 50; padding: 50;} </style> -->
+    <style type="text/css"> html, body, #map-canvas { height: 80%; } </style>
     <script type="text/javascript" src="core.js"> </script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvvMm5j7hlVOs20mb0qjmKcGV3nj53I9o"> </script>
+
     <script type="text/javascript">
       function initialize() {
         var mapOptions = {
@@ -20,6 +21,7 @@
       }
       google.maps.event.addDomListener(window, 'load', initialize);
     </script>
+
   </head>
   <body>
 	<div ng-controller="ErrorController" >
@@ -34,8 +36,164 @@
 		<h1>Price: ${{results.price}}</h1>
 	</div>
 
-  </body>
-</html>
+	<div id="entryForm" ng-show="showForm()" ng-controller="FormController"><br>
+    	    <form novalidate class="simple-form">
+	    <input id="address" name="address" ng-model="user.address" placeholder="Enter location/address">
+	    <input id="plate_number" name="plate_number" ng-model="user.plate_number" placeholder="Enter license plate number">
+	    <div ng-controller="PhoneController" ><font color="red">{{error}}</font></div>
+	    <input id="phone_number" name="phone_number" ng-model="user.phone_number"  placeholder="Enter phone number">
+	    <input id="price" name="price" ng-model="user.price"  placeholder="Enter price">
+            <button onclick="sell(this.form)">Sell Parking Spot</button>
+            <button onclick="buy(this.form)">Buy Parking Spot</button>
+            </form>
+	<!-- <pre>form = {{user | json}}</pre> --><br>
+	    {{output.message}}
+        </div>
 
+<script>
+function PhoneController($scope){
+    $scope.error='';
+}
 
+function ResultsController($scope){
 
+    $scope.setResults = function (data){ 
+        $scope.results = {};
+        $scope.results.plate_number = data.plate_number;
+        $scope.results.phone_number = data.phone_number;
+        $scope.results.price = data.price;
+    }
+
+    $scope.showForm = function (res){ 
+	defaultValue=false;
+	if(res != undefined){
+	    $scope.showForm.cached=res;
+	    return res;
+	}
+
+	// res == undefined do we hae cached?
+        if ($scope.showForm.cached == undefined){
+	    return defaultValue;
+        }
+	return $scope.showForm.cached;
+    } // END showForm()
+
+}  // END ResultsController()
+
+function FormController($scope){
+    $scope.error='';
+
+    $scope.output = {};
+    $scope.output.message = "Looking for parking close to where you are? This spot is for you.  Advertise or buy parking. Choose one. All transactions are to be negotiated between the parker and parkee. AutoCrest is not responsible for guarantee of parking spots, payment, or liability resulting from this sites use.";
+
+    $scope.setOutput = function (data){ 
+        $scope.output.message = data;
+    }
+
+    $scope.showForm = function (res){ 
+	defaultValue=true;
+	if(res != undefined){
+	    $scope.showForm.cached=res;
+	    return res;
+	}
+
+	// res == undefined do we hae cached?
+        if ($scope.showForm.cached == undefined){
+	    return defaultValue;
+        }
+
+	return $scope.showForm.cached;
+    } // END showForm()
+
+} // END FormController()
+
+angular.module("autocrest", [])
+    .controller("ErrorController", function($scope) {
+    $scope.errorTo = {};
+    $scope.errorTo.title = "World, AutoCrest";
+    $scope.errorTo.phone = "*";
+});
+
+var socket = io.connect('http://localhost');
+
+function transact(transaction, data){ 
+    socket.emit("transaction", { 
+        address: data.address.value,
+        phone_number: data.phone_number.value,
+        price: data.price.value, 
+        plate_number: data.plate_number.value,
+        request: transaction 
+    }); // END socket.emit
+} // END transact()
+
+function buy(data){ 
+    transact("buy", data);
+}
+
+function sell(data){ 
+    transact("sell", data);
+}
+
+function showForm(form, bool){
+    var scope = angular.element( document.getElementById(form)).
+    scope();
+    scope.$apply(function () {
+        scope.showForm(bool);
+    });
+}
+
+socket.on('success', function (result) {
+    showForm("entryForm", false);
+    showForm("resultsForm", true);
+    googleapi="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvvMm5j7hlVOs20mb0qjmKcGV3nj53I9o";
+    var scope = angular.element( document.getElementById("resultsForm")).scope();
+    scope.$apply(function () {
+        scope.setResults(result);
+    });
+
+    /*
+    loadScript(googleapi, function(){
+        google.maps.event.addDomListener(window, 'load', initialize);
+    });
+    */
+
+    //console.log(scope);
+}); // socket.on('success');
+
+function colorFieldById(id, result){
+    console.log("colorFieldById: [" + id + "] [" + result[id] + "]");
+    var element = document.getElementById(id);
+    if ( "invalid" == result[id] ){
+	element.style.backgroundColor = "red"; 
+    }
+    else{
+	element.style.backgroundColor = "white"; 
+    }
+} // END colorFieldById()
+
+function colorInputFields(result){
+    colorFieldById("phone_number", result);
+    colorFieldById("price", result);
+    colorFieldById("address", result);
+    colorFieldById("plate_number", result);
+} // END colorInputFields()  
+
+socket.on('fail', function (result) {
+    //io.sockets.emit('failed', { error: 'failed to validate' });
+    console.log("failed: [" + result + "]");
+    var scope = angular.element( document.getElementById("entryForm")).scope();
+    scope.$apply(function () {
+        scope.setOutput("Validation error. Fill in red fields with proper results.");
+    });
+    colorInputFields(result);
+}); // END socket.on('fail')
+
+function initialize() {
+    var mapOptions = {
+    center: { lat: -34.397, lng: 150.644 },
+    zoom: 8
+    };
+    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions); 
+}
+
+</script></body></html>

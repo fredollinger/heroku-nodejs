@@ -3,6 +3,11 @@ APP="index.js"
 task :default => :start
 
 namespace :test do
+desc "Test delete of DB"
+task :dbdelete do
+    sh "nodejs test/dbdelete.js"
+end
+
 desc "Test viper the database connector"
 task :db do
     sh "nodejs test/dbtest.js"

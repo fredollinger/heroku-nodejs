@@ -2,12 +2,27 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+        <style type="text/css"> html, body, #map-canvas { height: 80%; } </style>
 	<link rel="stylesheet" href="themes/simplecozy.css" type="text/css" media="screen" />
         </script>
         <script type="text/javascript" src="core.js"> </script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
 	<script src="core.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvvMm5j7hlVOs20mb0qjmKcGV3nj53I9o"> </script>
+
+
+    <script type="text/javascript">
+      function initialize() {
+        var mapOptions = {
+          center: { lat: -34.397, lng: 150.644},
+          zoom: 8
+        };
+        var map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
 
         <title>AutoCrest</title>
     </head>
@@ -42,6 +57,7 @@
         </div>
 
 <script src="/socket.io/socket.io.js"></script>
+
 <script>
 function PhoneController($scope){
     $scope.error='';
@@ -145,7 +161,7 @@ socket.on('success', function (result) {
 
     /*
     loadScript(googleapi, function(){
-        google.maps.event.addDomListener(window, 'load', initialize);
+        google.maps.event.addDomListener(window, 'load', imnitialize);
     });
     */
 
