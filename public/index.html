@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <title>AutoCrest</title>
         <meta charset="utf-8">
-        <style type="text/css"> html, body, #map-canvas { height: 80%; } </style>
+        <style type="text/css"> html, body, #map-canvas { 
+            width: 500px;
+            height: 400px;
+	} </style>
 	<link rel="stylesheet" href="themes/simplecozy.css" type="text/css" media="screen" />
         </script>
         <script type="text/javascript" src="core.js"> </script>
@@ -10,31 +14,15 @@
 	<script src="core.js"></script>
         <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvvMm5j7hlVOs20mb0qjmKcGV3nj53I9o"> </script>
-
-
-    <script type="text/javascript">
-      function initialize() {
-        var mapOptions = {
-          center: { lat: -34.397, lng: 150.644},
-          zoom: 8
-        };
-        var map = new google.maps.Map(document.getElementById('map-canvas'),
-            mapOptions);
-      }
-      google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
-
-        <title>AutoCrest</title>
     </head>
 
     <body data-ng-app="autocrest">
-
 	<div ng-controller="ErrorController" >
         <h1>AutoCrest</h1><h1>
-        Mon Nov 24 18:37:24 PST 2014
+        Sun Nov 30 16:22:38 PST 2014
         </h1></div>
 
-	<div id="map-canvas"></div>
+	<div id="map-canvas" ng-show="showForm()" ng-controller="MapController"  ></div>
 
 	<div id="resultsForm" ng-show="showForm()" ng-controller="ResultsController">
 		<h1>Plate Number: {{results.plate_number}}</h1>
@@ -51,8 +39,8 @@
 	    <input id="price" name="price" ng-model="user.price"  placeholder="Enter price">
             <button onclick="sell(this.form)">Sell Parking Spot</button>
             <button onclick="buy(this.form)">Buy Parking Spot</button>
-            </form>
-	<!-- <pre>form = {{user | json}}</pre> --><br>
+            <button onclick="fillForm(this.form)">Fill Form</button>
+            </form><br>
 	    {{output.message}}
         </div>
 
@@ -62,6 +50,22 @@
 function PhoneController($scope){
     $scope.error='';
 }
+
+function MapController($scope){
+    $scope.showForm = function (res){ 
+	defaultValue=false;
+	if(res != undefined){
+	    $scope.showForm.cached=res;
+	    return res;
+	}
+
+	// res == undefined do we hae cached?
+        if ($scope.showForm.cached == undefined){
+	    return defaultValue;
+        }
+	return $scope.showForm.cached;
+    } // END showForm()
+}  // END ResultsController()
 
 function ResultsController($scope){
 
@@ -134,6 +138,14 @@ function transact(transaction, data){
     }); // END socket.emit
 } // END transact()
 
+function fillForm(data){ 
+   console.log("FIXME: fillForm()");
+   document.getElementById('phone_number').value="619-491-0400";
+   document.getElementById('price').value="5";
+   document.getElementById('address').value="308 University Avenue, San Diego, CA 92103";
+   document.getElementById('plate_number').value="S3V3N";
+} // END fillForm()
+
 function buy(data){ 
     transact("buy", data);
 }
@@ -153,17 +165,16 @@ function showForm(form, bool){
 socket.on('success', function (result) {
     showForm("entryForm", false);
     showForm("resultsForm", true);
-    googleapi="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvvMm5j7hlVOs20mb0qjmKcGV3nj53I9o";
+    showForm("map-canvas", true);
     var scope = angular.element( document.getElementById("resultsForm")).scope();
     scope.$apply(function () {
         scope.setResults(result);
     });
+    initializeMap();
 
-    /*
     loadScript(googleapi, function(){
-        google.maps.event.addDomListener(window, 'load', imnitialize);
+        initializeMap();
     });
-    */
 
     //console.log(scope);
 }); // socket.on('success');
@@ -196,13 +207,20 @@ socket.on('fail', function (result) {
     colorInputFields(result);
 }); // END socket.on('fail')
 
-function initialize() {
+function initializeMap() {
+    //googleapi="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvvMm5j7hlVOs20mb0qjmKcGV3nj53I9o";
     var mapOptions = {
     center: { lat: -34.397, lng: 150.644 },
     zoom: 8
     };
+    /*
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = googleapi;
+    */
     var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions); 
-}
+
+} // END initializeMap()
 
 </script></body></html>
 

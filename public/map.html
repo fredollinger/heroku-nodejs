@@ -145,17 +145,14 @@ function showForm(form, bool){
 socket.on('success', function (result) {
     showForm("entryForm", false);
     showForm("resultsForm", true);
-    googleapi="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvvMm5j7hlVOs20mb0qjmKcGV3nj53I9o";
+    //googleapi="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvvMm5j7hlVOs20mb0qjmKcGV3nj53I9o";
     var scope = angular.element( document.getElementById("resultsForm")).scope();
     scope.$apply(function () {
         scope.setResults(result);
     });
 
     /*
-    loadScript(googleapi, function(){
-        google.maps.event.addDomListener(window, 'load', initialize);
-    });
-    */
+        */
 
     //console.log(scope);
 }); // socket.on('success');
