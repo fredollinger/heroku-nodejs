@@ -1,3 +1,10 @@
+function run(cmd){
+    var cmds = [
+        cmd
+    ];
+    jake.exec(cmds, {interactive : true}, function() { complete(); });
+}
+
 desc('Tests validate code');
 task('validate', {async : true}, function() {
     var cmds = [
@@ -27,3 +34,8 @@ task('open', {async : true}, function() {
     ];
     jake.exec(cmds, {interactive : true}, function() { complete(); });
 }); // END START
+
+desc('Test Code To Cache an Address then Read that Back');
+task('cacheaddy', {async : true}, function() {
+    run('nodejs test/cacheaddy.js');
+}); // END ADDYCACHE
