@@ -7,7 +7,7 @@ function ACCobra() {
 
     this.findMatch = function (data, request, callback){
         var m = mongoose.model(this.DATABASE, this.userSchema);
-        console.log('search for: [%s] ', request);
+        console.log('search for: [' + request + ']');
 
         var query=m.findOne({ 'request': request }, {
 	        address: address,

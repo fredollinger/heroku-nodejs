@@ -16,10 +16,12 @@ function test(){
     };
     
     console.log(req.query.address);
-    viper.cacheAddress(req);
+    match=viper.findMatch(req);
+    //viper.cacheAddress(req);
     //wait.for(viper.logRequest, req);
     
     //viper.findMatch(req, "buy", queryResults);
+    //console.log("match [" + match + "]");
 
     console.log("cacheaddy END");
 } // wait()
