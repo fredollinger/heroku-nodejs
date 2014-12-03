@@ -3,10 +3,10 @@ var now = require('mout/time/now');
 
 function ACCobra() {
     this.DATABASE='AddressCache';
-    mongoose.connect('localhost', DATABASE);
+    mongoose.connect('localhost', this.DATABASE);
 
     this.findMatch = function (data, request, callback){
-        var m = mongoose.model(DATABASE, this.userSchema);
+        var m = mongoose.model(this.DATABASE, this.userSchema);
         console.log('search for: [%s] ', request);
 
         var query=m.findOne({ 'request': request }, {
@@ -22,7 +22,8 @@ function ACCobra() {
     }); // END userSchema
 
     this.cacheAddress = function (query){
-    	var m = mongoose.model(DATABASE, this.userSchema);
+    /*
+    	var m = mongoose.model(this.DATABASE, this.userSchema);
     	var Customer = new m ({
             address: query.address,
             x: query.x,
@@ -37,7 +38,7 @@ function ACCobra() {
 	      else
                   console.log(err);
            }); // END SAVE
-
+    */
     } // END cacheAddress()
 } // END ACValidator
 module.exports = ACCobra;
