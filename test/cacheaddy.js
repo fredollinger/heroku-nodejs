@@ -5,9 +5,22 @@ var wait = require("wait.for");
 var ACCobra = require('../js/accobra.js');
 var viper = new ACCobra();
 
-function queryResults(err, results){
-    console.log("query Results: [%s]", results);
+// STUB
+function lookupAddress(data){
+    console.log("address: [" + data.address + "]");
+    data.lat=-34.397;
+    data.lng=150.644;
+    return data;
 }
+
+function queryResults(err, results){
+    if ( null == results ){
+        console.log("no match");
+    }
+    else{
+        console.log("query Results: [%s]", results);
+    }
+} // END queryResults()
 
 function test(){
     req={};
@@ -17,15 +30,20 @@ function test(){
     
     console.log(req.query.address);
     match=viper.findMatch(req, queryResults);
-    //viper.cacheAddress(req);
-    //wait.for(viper.logRequest, req);
+
+    if ( null == match ){
+        console.log("match is NULL");
+	match = { address : req.query.address };
+	match=lookupAddress(match);
+        viper.cacheAddress(match);
+    }
+    else{
+        console.log("match is NOT NULL");
+    }
+    console.log("address: [" + match.address + "] lat: [" + match.lat + "] [" + match.lng + "]");
     
-    //viper.findMatch(req, "buy", queryResults);
-    //console.log("match [" + match + "]");
-
     console.log("cacheaddy END");
-} // wait()
-
+} // test()
 
 wait.launchFiber(test);
 

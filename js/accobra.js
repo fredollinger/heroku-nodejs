@@ -9,10 +9,14 @@ function ACCobra() {
         var m = mongoose.model(this.DATABASE, this.userSchema);
         //console.log('search for: [' + data.query.address + ']');
 
-        var query=m.findOne({ 'address': data.query.address }, {
+        var query=m.findOne({ 'address': data.query.address }, function(err, result) {
+	    if ( null == result){
+	        result = {};
+            }	
+	    result.addresss=data.query.address;
+	    console.log("findOne: [" + result + "]");
+	    return result;     
 	});
-	query.exec(callback);
-
     } // END findMatch
 
     this.userSchema = new mongoose.Schema({
@@ -22,13 +26,13 @@ function ACCobra() {
     }); // END userSchema
 
     this.cacheAddress = function (query){
-    /*
     	var m = mongoose.model(this.DATABASE, this.userSchema);
     	var Customer = new m ({
             address: query.address,
-            x: query.x,
-            y: query.y
+            lat: query.lat,
+            lng: query.lng
           });  // END Buyer
+    /*
 
           Customer.save(function(err) {
 	      console.log("saving");
