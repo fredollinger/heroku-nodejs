@@ -5,14 +5,14 @@ function ACCobra() {
     this.DATABASE='AddressCache';
     mongoose.connect('localhost', this.DATABASE);
 
-    this.findMatch = function (data, request, callback){
+    this.findMatch = function (data, callback){
         var m = mongoose.model(this.DATABASE, this.userSchema);
-        console.log('search for: [' + request + ']');
+        //console.log('search for: [' + data.query.address + ']');
 
-        var query=m.findOne({ 'request': request }, {
-	        address: address,
-	    });
-	    query.exec(callback);
+        var query=m.findOne({ 'address': data.query.address }, {
+	});
+	query.exec(callback);
+
     } // END findMatch
 
     this.userSchema = new mongoose.Schema({

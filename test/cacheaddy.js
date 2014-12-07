@@ -16,7 +16,7 @@ function test(){
     };
     
     console.log(req.query.address);
-    match=viper.findMatch(req);
+    match=viper.findMatch(req, queryResults);
     //viper.cacheAddress(req);
     //wait.for(viper.logRequest, req);
     
