@@ -77,6 +77,9 @@ io.on('connection', function (socket) {
 /* Searcher is seller 
  * which means they searched for a "buy" match. */
 function sellerSearchCB(err, result){
+    result.lat=32.749393;
+    result.lng=-117.162453;
+    console.log("lat: " + result.lat + " lng: " + result.lng);
     if ( null != result ){
         io.sockets.emit('success',  result );
     }
@@ -87,6 +90,8 @@ function sellerSearchCB(err, result){
 }
 
 function buyerSearchCB(err, result){
+    result.lat=32.749393;
+    result.lng=-117.162453;
     console.log("FAIL");
     io.sockets.emit('fail',  result );
 

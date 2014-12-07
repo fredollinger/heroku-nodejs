@@ -167,14 +167,17 @@ socket.on('success', function (result) {
     showForm("resultsForm", true);
     showForm("map-canvas", true);
     var scope = angular.element( document.getElementById("resultsForm")).scope();
+    console.log("result: [" + result + "]");
     scope.$apply(function () {
         scope.setResults(result);
     });
-    initializeMap();
+    result.lat=32.749393;
+    result.lng=-117.162453;
+    initializeMap(result);
 
-    loadScript(googleapi, function(){
-        initializeMap();
-    });
+    //loadScript(googleapi, function(){
+     //   initializeMap(result);
+    //});
 
     //console.log(scope);
 }); // socket.on('success');
@@ -207,18 +210,21 @@ socket.on('fail', function (result) {
     colorInputFields(result);
 }); // END socket.on('fail')
 
-function initializeMap() {
-    //googleapi="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvvMm5j7hlVOs20mb0qjmKcGV3nj53I9o";
+function initializeMap(result) {
+    var myLatlng = new google.maps.LatLng(result.lat,result.lng);
+    //center: { lat: -34.397, lng: 150.644 },
+    console.log("lat: " + result.lat + " lng: " + result.lng);
     var mapOptions = {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 8
+        center: myLatlng,
+        zoom: 15
     };
-    /*
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = googleapi;
-    */
+
     var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions); 
+    var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        title: result.phone_number
+    })
 
 } // END initializeMap()
 
