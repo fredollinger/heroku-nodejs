@@ -15,8 +15,8 @@ function ACCobra() {
             }	
 	    result.addresss=data.query.address;
 	    console.log("findOne: [" + result + "]");
-	    return result;     
 	});
+	query.exec(callback);
     } // END findMatch
 
     this.userSchema = new mongoose.Schema({
@@ -32,17 +32,16 @@ function ACCobra() {
             lat: query.lat,
             lng: query.lng
           });  // END Buyer
-    /*
 
           Customer.save(function(err) {
 	      console.log("saving");
 	      if (!err) {
 	          console.log('[%s] saved.', query.request );
 	      }
-	      else
+	      else {
                   console.log(err);
-           }); // END SAVE
-    */
+	      }
+          }); // END save()
     } // END cacheAddress()
 } // END ACValidator
 module.exports = ACCobra;

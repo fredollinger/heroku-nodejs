@@ -27,6 +27,11 @@ task('default', function () {
     jake.Task['start'].invoke();
 });
 
+desc('Delete databases');
+task('dbclean', {async : true}, function() {
+    run('nodejs bin/dbclean.js');
+}); 
+
 desc('Start node');
 task('open', {async : true}, function() {
     var cmds = [

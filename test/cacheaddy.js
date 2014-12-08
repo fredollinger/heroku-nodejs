@@ -14,7 +14,7 @@ function lookupAddress(data){
 }
 
 function queryResults(err, results){
-    if ( null == results ){
+    if ( null == results.lat ){
         console.log("no match");
     }
     else{
@@ -31,8 +31,9 @@ function test(){
     console.log(req.query.address);
     match=viper.findMatch(req, queryResults);
 
+    /*
     if ( null == match ){
-        console.log("match is NULL");
+        console.log("match is NULL: [" + match + "]");
 	match = { address : req.query.address };
 	match=lookupAddress(match);
         viper.cacheAddress(match);
@@ -42,6 +43,7 @@ function test(){
     }
     console.log("address: [" + match.address + "] lat: [" + match.lat + "] [" + match.lng + "]");
     
+    */
     console.log("cacheaddy END");
 } // test()
 
