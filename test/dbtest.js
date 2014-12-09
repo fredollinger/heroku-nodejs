@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var wait = require("wait.for");
 var mongoose = require('mongoose');
+var now = require('mout/time/now');
 
 var ACViper = require('../js/acviper.js');
 var viper = new ACViper();
@@ -15,6 +16,11 @@ function handleError(err){
 }
 
 function test(){
+    console.log("Current time: [%s]", now());
+    hours=1;
+    //hours=1; // how many hours ago to match docs
+    olderDate=now() - (60*60*hours); 
+    //olderDate=1413082795656+1;
     this.userSchema = new mongoose.Schema({
        address: { type: String },
        plate_number: { type: String },
@@ -24,11 +30,12 @@ function test(){
        request: { type: String } // "buy" or "sell"
     }); // END userSchema
     var m = mongoose.model('Customers', this.userSchema);
-    var query = m.findOne({ 
-        'request': 'buy' 
-    });
 
-    query.select('date');
+    var query = m.findOne({"date": {"$lt": olderDate}});
+
+    //var query = m.findOne({ 'date': olderDate });
+
+    query.select('date plate_number phone_number');
 
     query.exec(function (err, person) {
         if (err) return handleError(err);
