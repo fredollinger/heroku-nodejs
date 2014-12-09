@@ -81,9 +81,11 @@ function sellerSearchCB(err, result){
     result.lng=-117.162453;
     console.log("lat: " + result.lat + " lng: " + result.lng);
     if ( null != result ){
+	console.log("Success: [" + result.address + "]");
         io.sockets.emit('success',  result );
     }
     else{
+	console.log("Fail.");
         io.sockets.emit('failed',  result );
         return;
     }

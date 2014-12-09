@@ -1,4 +1,4 @@
-function run(cmd){
+function sh(cmd){
     var cmds = [
         cmd
     ];
@@ -29,7 +29,7 @@ task('default', function () {
 
 desc('Delete databases');
 task('dbclean', {async : true}, function() {
-    run('nodejs bin/dbclean.js');
+    sh('nodejs bin/dbclean.js');
 }); 
 
 desc('Start node');
@@ -40,7 +40,18 @@ task('open', {async : true}, function() {
     jake.exec(cmds, {interactive : true}, function() { complete(); });
 }); // END START
 
+namespace('test', function () {
 desc('Test Code To Cache an Address then Read that Back');
 task('cacheaddy', {async : true}, function() {
-    run('nodejs test/cacheaddy.js');
+    sh('nodejs test/cacheaddy.js');
 }); // END ADDYCACHE
+
+desc('Test database. TODO: DESC MORE');
+task('db', {async : true}, function() {
+    sh('nodejs test/dbtest.js');
+}); // END ADDYCACHE
+
+}); // END namespace test
+
+
+
