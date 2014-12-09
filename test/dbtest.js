@@ -31,15 +31,20 @@ function test(){
     }); // END userSchema
     var m = mongoose.model('Customers', this.userSchema);
 
-    var query = m.findOne({"date": {"$lt": olderDate}});
+    //var query = m.findOne({"date": {"$lt": olderDate}});
+    var query = m.find({});
 
     //var query = m.findOne({ 'date': olderDate });
 
     query.select('date plate_number phone_number');
 
-    query.exec(function (err, person) {
+    query.exec(function (err, records) {
         if (err) return handleError(err);
-        console.log('[%s]', person.date );
+	records.forEach(function(record){
+	    console.log('Record found:' + record.date);
+	    record.remove();
+        });
+        //console.log('[%s]', person.date );
     })
 
     console.log("dbtest END");

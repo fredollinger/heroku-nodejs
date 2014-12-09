@@ -20,7 +20,7 @@ function transact(data){
         viper.findMatch(data, "sell", buyerSearchCB);
     }
     if ( "sell" == data.request){
-        viper.findMatch(data, "sell", sellerSearchCB);
+        viper.findMatch(data, "buy", sellerSearchCB);
     }
 } // END transact()
 
@@ -77,11 +77,11 @@ io.on('connection', function (socket) {
 /* Searcher is seller 
  * which means they searched for a "buy" match. */
 function sellerSearchCB(err, result){
-    result.lat=32.749393;
-    result.lng=-117.162453;
-    console.log("lat: " + result.lat + " lng: " + result.lng);
     if ( null != result ){
 	console.log("Success: [" + result.address + "]");
+        result.lat=32.749393;
+        result.lng=-117.162453;
+        console.log("lat: " + result.lat + " lng: " + result.lng);
         io.sockets.emit('success',  result );
     }
     else{
@@ -89,25 +89,22 @@ function sellerSearchCB(err, result){
         io.sockets.emit('failed',  result );
         return;
     }
-}
+    
+} // END sellerSearchCB()
 
 function buyerSearchCB(err, result){
-    result.lat=32.749393;
-    result.lng=-117.162453;
-    console.log("FAIL");
-    io.sockets.emit('fail',  result );
-
-    /*
-    if ( null != result ){
-        console.log("buyer success");
+     if ( null != result ){
+	console.log("Success: [" + result.address + "]");
+        result.lat=32.749393;
+        result.lng=-117.162453;
+        console.log("lat: " + result.lat + " lng: " + result.lng);
         io.sockets.emit('success',  result );
     }
     else{
-        console.log("buyer fail");
-        io.sockets.emit('fail',  result );
+	console.log("Fail.");
+        io.sockets.emit('failed',  result );
+        return;
     }
-    */
-
 } // END buyerSerachCB()
 
 console.log("Autocrest Started");
