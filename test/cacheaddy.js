@@ -14,39 +14,36 @@ function lookupAddress(data){
 }
 
 function queryResults(err, results){
-    if ( null == results.lat ){
+    console.log("query Results: [%s]", results);
+    if ( null == results ){
         console.log("no match");
     }
     else{
-        console.log("query Results: [%s]", results);
+        console.log("query Results: [%s]", results.address);
     }
 } // END queryResults()
 
 function test(){
+    //query = {
     req={};
+    //req.query = {
     req.query = {
-        address: "3777 Ruffin Road San Diego, CA"
+        //address: "Bob"
+        address: "Urban Moe's San Diego, CA"
+        , lat: -34.397
+        , lng: 150.644
     };
-    
-    console.log(req.query.address);
-    match=viper.findMatch(req, queryResults);
 
-    /*
-    if ( null == match ){
-        console.log("match is NULL: [" + match + "]");
-	match = { address : req.query.address };
-	match=lookupAddress(match);
-        viper.cacheAddress(match);
+    query = {
+        address: "Urban Moe's San Diego, CA"
     }
-    else{
-        console.log("match is NOT NULL");
-    }
-    console.log("address: [" + match.address + "] lat: [" + match.lat + "] [" + match.lng + "]");
     
-    */
+    //console.log(req.query.address);
+    viper.cacheAddress(query);
+    match=viper.findMatch(req, queryResults);
+    
+    
     console.log("cacheaddy END");
 } // test()
 
 wait.launchFiber(test);
-
-
