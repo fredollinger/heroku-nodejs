@@ -19,26 +19,25 @@ function queryResults(err, results){
         console.log("no match");
     }
     else{
-        console.log("query Results: [%s]", results.address);
+        console.log("query Results: [%s]", results.lat);
     }
 } // END queryResults()
 
 function test(){
     //query = {
     req={};
-    //req.query = {
-    req.query = {
-        //address: "Bob"
-        address: "Urban Moe's San Diego, CA"
+    address = "308 University Avenue, San Diego, CA 92103";
+
+    query = {
+	address: address
         , lat: -34.397
         , lng: 150.644
     };
 
-    query = {
-        address: "Urban Moe's San Diego, CA"
+    req.query = {
+	address: address
     }
     
-    //console.log(req.query.address);
     viper.cacheAddress(query);
     match=viper.findMatch(req, queryResults);
     

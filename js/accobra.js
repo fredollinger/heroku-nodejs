@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var now = require('mout/time/now');
 
 function ACCobra() {
-    this.DATABASE='AddressCache3';
+    this.DATABASE='AddressCache5';
     mongoose.connect('localhost', this.DATABASE);
 
     this.findMatch = function (data, callback){
@@ -40,7 +40,7 @@ function ACCobra() {
           Customer.save(function(err) {
 	      console.log("saving");
 	      if (!err) {
-	          console.log('[%s] saved.', query.lat );
+	          //console.log('[%s] saved.', query.lat );
 	      }
 	      else {
                   console.log(err);
