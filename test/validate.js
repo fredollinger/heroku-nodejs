@@ -21,16 +21,18 @@ else{
     console.log("isNumber() failed to invalidate blank");
 }
 
-/*
-number="619-867-5309"
+address = "308 University Avenue, San Diego, CA 92103";
 
-if (vali.phoneNumber(number)){
-    console.log("phone number test 1 passed");
+if (!vali.isAddress("Hillcrest", address)){
+    console.log("isAddresss() test 2 passed");
 }
 else{
-    console.log("failed to validate phone number");
+    console.log("isNumber() failed to invalidate blank");
 }
 
+
+
+/*
 number="1619-867-5309"
 
 if (!vali.phoneNumber(number)){

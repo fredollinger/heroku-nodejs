@@ -5,14 +5,6 @@ function sh(cmd){
     jake.exec(cmds, {interactive : true}, function() { complete(); });
 }
 
-desc('Tests validate code');
-task('validate', {async : true}, function() {
-    var cmds = [
-        'test/validate.js' 
-    ];
-    jake.exec(cmds, {interactive : true}, function() { complete(); });
-}); // END TEST
-
 desc('Start node');
 task('start', {async : true}, function() {
     var cmds = [
@@ -50,6 +42,16 @@ desc('Test database. TODO: DESC MORE');
 task('db', {async : true}, function() {
     sh('nodejs test/dbtest.js');
 }); // END ADDYCACHE
+
+desc('Tests validate code');
+task('validate', {async : true}, function() {
+    sh('test/validate.js');
+}); // END TEST
+
+desc('Tests map code');
+task('map', {async : true}, function() {
+    sh('nodejs test/gmaps.js');
+}); // END TEST
 
 }); // END namespace test
 

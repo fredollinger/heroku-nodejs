@@ -1,4 +1,8 @@
 function ACValidator() {
+    this.isAddress = function (hood, address){
+        return true;
+    } // isAddress()
+
     this.validateAll = function (res){
         return false;
     }

@@ -41,7 +41,8 @@ function validate(data){
         result.price="invalid";
     }
 
-    if (!validator.isAlphaNumber(data.address)){
+    //if (!validator.isAlphaNumber(data.address)){
+    if (!validator.isAddress("Hillcrest", data.address)){
         result.success=false;
         result.address="invalid";
     }
