@@ -13,6 +13,8 @@ var ACValidater = require('../js/acvalidater.js');
 var validate = new ACValidater();
 var gm = require('googlemaps');
 var util = require('util');
+//var geocoderProvider = 'google';
+//var httpAdapter = 'https';
 
 var ACViper = require('../js/acviper.js');
 var viper = new ACViper();
@@ -21,22 +23,16 @@ function test(){
 
     address = "308 University Avenue, San Diego, CA 92103";
 
-    /*
-    if (validate.isAddress("Hillcrest", address)){
-        console.log("isAddresss() test 1 passed");
-    }
-    else{
-        console.log("isAddress() test 1 failed to validate address");
-    }
-
-    address = "";
-    if (!validate.isAddress("Hillcrest", address)){
-        console.log("isAddresss() test 2 passed");
-    }
-    else{
-        console.log("isAddress() test 2 failed to invalidate address");
-    }
-    */
+    gm.geocode(address, function(err, data){
+        util.puts(JSON.stringify(data));
+        daHood=JSON.stringify(data.results[0].address_components[2].long_name).replace(/"/g, ""); 
+	if (validate.inNeighborhood("Hillcrest", data)) {
+	    console.log("in neighborhood");
+	}
+        else{
+	    console.log("NOT in neighborhood");
+	}
+    });
 
     console.log("maps test END");
 

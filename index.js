@@ -3,6 +3,8 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var now = require('mout/time/now');
+var gm = require('googlemaps');
+var util = require('util');
 
 var ACValidater = require('./js/acvalidater.js');
 var validator = new ACValidater();
@@ -41,11 +43,12 @@ function validate(data){
         result.price="invalid";
     }
 
-    //if (!validator.isAlphaNumber(data.address)){
+    /*
     if (!validator.isAddress("Hillcrest", data.address)){
         result.success=false;
         result.address="invalid";
     }
+    */
 
     if (!validator.isAlphaNumber(data.plate_number)){
         result.success=false;
@@ -56,11 +59,37 @@ function validate(data){
 } // END validate()
 
 
+function startProcessing(data){
+    gm.geocode(data.address, function(err, addy){
+	valid=validate(data);
+        util.puts(JSON.stringify(data));
+	if ( ! valid.success ){
+    	    console.log("Validation FAIL.");
+            io.sockets.emit('fail',  valid );
+	    return;
+        } 
+	transact(data);
+    });
+} // END startProcessing()
+	// TODO: ADD lat and lng here...
+/*	
+	if (validate.inNeighborhood("Hillcrest", addy)) {
+	    console.log("in neighborhood");
+	    transact(data);
+	}
+        else{
+	    console.log("NOT in neighborhood");
+            io.sockets.emit('fail',  valid );
+	}
+*/
+
+
 io.on('connection', function (socket) {
     console.log("Connection!!");
-    //socket.emit('news', { hello: 'world' });
     
     socket.on('transaction', function (data) {
+	startProcessing(data);
+
 	valid=validate(data);
         if ( ! valid.success ){
     	    console.log("Validation FAIL.");
@@ -68,11 +97,9 @@ io.on('connection', function (socket) {
 	    return;
         } 
 	transact(data);
+
         return;
     }); // END socket.on('transaction');
-
-    //socket.on('failed', function (data) {
-    //});
 }); // END io.on()
 
 /* Searcher is seller 
