@@ -61,8 +61,17 @@ function validate(data){
 
 function startProcessing(data){
     gm.geocode(data.address, function(err, addy){
+	console.log("error: [%s]", err);
+	if (! null == err){
+    	    console.log("addy lookup fail");
+            io.sockets.emit('fail',  valid );
+	    return;
+	}
+	console.log("data: [%s]", addy);
+        util.puts(JSON.stringify(addy));
+	data.neighborhood=JSON.stringify(addy.results[0].address_components[2].long_name).replace(/"/g, ""); 
+	console.log("neighborhood: [%s]", data.neighborhood);
 	valid=validate(data);
-        util.puts(JSON.stringify(data));
 	if ( ! valid.success ){
     	    console.log("Validation FAIL.");
             io.sockets.emit('fail',  valid );
@@ -89,15 +98,6 @@ io.on('connection', function (socket) {
     
     socket.on('transaction', function (data) {
 	startProcessing(data);
-
-	valid=validate(data);
-        if ( ! valid.success ){
-    	    console.log("Validation FAIL.");
-            io.sockets.emit('fail',  valid );
-	    return;
-        } 
-	transact(data);
-
         return;
     }); // END socket.on('transaction');
 }); // END io.on()
