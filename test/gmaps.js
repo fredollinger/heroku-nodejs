@@ -25,13 +25,9 @@ function test(){
 
     gm.geocode(address, function(err, data){
         util.puts(JSON.stringify(data));
-        daHood=JSON.stringify(data.results[0].address_components[2].long_name).replace(/"/g, ""); 
-	if (validate.inNeighborhood("Hillcrest", data)) {
-	    console.log("in neighborhood");
-	}
-        else{
-	    console.log("NOT in neighborhood");
-	}
+        //daHood=JSON.stringify(data.results[0].address_components[2].long_name).replace(/"/g, ""); 
+        location=JSON.stringify(data.results[0].geometry.location);
+        console.log("lat: [%s]", location);
     });
 
     console.log("maps test END");

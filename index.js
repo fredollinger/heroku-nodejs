@@ -70,7 +70,9 @@ function startProcessing(data){
 	console.log("data: [%s]", addy);
         util.puts(JSON.stringify(addy));
 	data.neighborhood=JSON.stringify(addy.results[0].address_components[2].long_name).replace(/"/g, ""); 
+	data.location=JSON.stringify(addy.results[0].geometry.location);
 	console.log("neighborhood: [%s]", data.neighborhood);
+	console.log("location: [%s]", data.location);
 	valid=validate(data);
 	if ( ! valid.success ){
     	    console.log("Validation FAIL.");
