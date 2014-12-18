@@ -70,9 +70,10 @@ function startProcessing(data){
 	console.log("data: [%s]", addy);
         util.puts(JSON.stringify(addy));
 	data.neighborhood=JSON.stringify(addy.results[0].address_components[2].long_name).replace(/"/g, ""); 
-	data.location=JSON.stringify(addy.results[0].geometry.location);
-	console.log("neighborhood: [%s]", data.neighborhood);
-	console.log("location: [%s]", data.location);
+	data.lat=JSON.stringify(addy.results[0].geometry.location.lat);
+	data.lng=JSON.stringify(addy.results[0].geometry.location.lng);
+	//console.log("neighborhood: [%s]", data.neighborhood);
+	console.log("lat: [%s]", data.lat);
 	valid=validate(data);
 	if ( ! valid.success ){
     	    console.log("Validation FAIL.");
@@ -109,13 +110,13 @@ io.on('connection', function (socket) {
 function sellerSearchCB(err, result){
     if ( null != result ){
 	console.log("Success: [" + result.address + "]");
-        result.lat=32.749393;
-        result.lng=-117.162453;
-        console.log("lat: " + result.lat + " lng: " + result.lng);
+        //result.lat=32.749393;
+        //result.lng=-117.162453;
+        console.log("success: [%s]", result);
         io.sockets.emit('success',  result );
     }
     else{
-	console.log("Fail.");
+	console.log("Sell Fail.");
         io.sockets.emit('failed',  result );
         return;
     }
@@ -125,13 +126,13 @@ function sellerSearchCB(err, result){
 function buyerSearchCB(err, result){
      if ( null != result ){
 	console.log("Success: [" + result.address + "]");
-        result.lat=32.749393;
-        result.lng=-117.162453;
-        console.log("lat: " + result.lat + " lng: " + result.lng);
+        //result.lat=32.749393;
+        //result.lng=-117.162453;
+        console.log("success: [%s]", result);
         io.sockets.emit('success',  result );
     }
     else{
-	console.log("Fail.");
+	console.log("Buy Fail.");
         io.sockets.emit('failed',  result );
         return;
     }

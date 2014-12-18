@@ -171,15 +171,10 @@ socket.on('success', function (result) {
     scope.$apply(function () {
         scope.setResults(result);
     });
-    result.lat=32.749393;
-    result.lng=-117.162453;
+    //result.lat=32.749393;
+    //result.lng=-117.162453;
     initializeMap(result);
 
-    //loadScript(googleapi, function(){
-     //   initializeMap(result);
-    //});
-
-    //console.log(scope);
 }); // socket.on('success');
 
 function colorFieldById(id, result){
@@ -212,8 +207,8 @@ socket.on('fail', function (result) {
 
 function initializeMap(result) {
     var myLatlng = new google.maps.LatLng(result.lat,result.lng);
-    //center: { lat: -34.397, lng: 150.644 },
-    console.log("lat: " + result.lat + " lng: " + result.lng);
+    console.log(JSON.stringify(result));
+    //console.log("lat: " + result.lat + " lng: " + result.lng);
     var mapOptions = {
         center: myLatlng,
         zoom: 15

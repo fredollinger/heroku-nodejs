@@ -1,11 +1,13 @@
 var mongoose = require('mongoose');
 var now = require('mout/time/now');
+var util = require('util');
 
 function ACViper() {
-    mongoose.connect('localhost', 'Customers');
+    this.model="Customer3";
+    mongoose.connect('localhost', this.model);
 
     this.findMatch = function (data, request, callback){
-        var m = mongoose.model('Customers', this.userSchema);
+        var m = mongoose.model(this.model, this.userSchema);
         console.log('search for: [%s] ', request);
 
         var query=m.findOne({ 'request': request }, {
@@ -14,6 +16,8 @@ function ACViper() {
 	    address: 1,
 	    request: 1,
 	    price: 1,
+	    lat: 1,
+	    lng: 1,
 	    _id: 0
 	});
 	query.exec(callback);
@@ -25,22 +29,27 @@ function ACViper() {
        phone_number: { type: String },
        price: { type: Number, min: 0 },
        date: { type: Number, min: 0 },
+       lat: { type: Number },
+       lng: { type: Number },
        request: { type: String } // "buy" or "sell"
     }); // END userSchema
 
     this.logRequest = function (query){
-    	var m = mongoose.model('Customers', this.userSchema);
+    	var m = mongoose.model(this.model, this.userSchema);
     	var Customer = new m ({
             address: query.address,
             plate_number: query.plate_number,
             phone_number: query.phone_number,
             price: query.price,
+	    lat: query.lat,
+	    lng: query.lng,
     	    date: now(),
             request: query.request
           });  // END Buyer
 
+          util.puts("log request: [" + JSON.stringify(query) + "]");
+
           Customer.save(function(err) {
-	      console.log("saving");
 	      if (!err) {
 	          console.log('[%s] saved.', query.request );
 	      }
